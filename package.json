@@ -1,6 +1,6 @@
 {
   "name": "y2",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The official TypeScript library for the Y2 API",
   "author": "Y2 <>",
   "types": "dist/index.d.ts",
