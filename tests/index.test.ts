@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import { APIPromise } from 'y2/core/api-promise';
+import { APIPromise } from 'y2-ts/core/api-promise';
 
 import util from 'node:util';
-import Y2 from 'y2';
-import { APIUserAbortError } from 'y2';
+import Y2 from 'y2-ts';
+import { APIUserAbortError } from 'y2-ts';
 const defaultFetch = fetch;
 
 describe('instantiate client', () => {

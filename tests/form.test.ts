@@ -1,5 +1,5 @@
-import { multipartFormRequestOptions, createForm } from 'y2/internal/uploads';
-import { toFile } from 'y2/core/uploads';
+import { multipartFormRequestOptions, createForm } from 'y2-ts/internal/uploads';
+import { toFile } from 'y2-ts/core/uploads';
 
 describe('form data validation', () => {
   test('valid values do not error', async () => {
