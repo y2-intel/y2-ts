@@ -25,7 +25,7 @@ export default tseslint.config(
         {
           patterns: [
             {
-              regex: '^y2(/.*)?',
+              regex: '^y2-ts(/.*)?',
               message: 'Use a relative import, not a package import.',
             },
           ],
