@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.0.3 (2025-12-26)
+
+Full Changelog: [v0.0.2...v0.0.3](https://github.com/y2-intel/y2-ts/compare/v0.0.2...v0.0.3)
+
+### Chores
+
+* update SDK settings ([314ceaa](https://github.com/y2-intel/y2-ts/commit/314ceaa957278084fefb53a701f53a32c415af6f))
+
 ## 0.0.2 (2025-12-25)
 
 Full Changelog: [v0.0.1...v0.0.2](https://github.com/y2-intel/y2-ts/compare/v0.0.1...v0.0.2)
