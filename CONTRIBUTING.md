@@ -55,12 +55,12 @@ $ cd y2-ts
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link y2
+$ yarn link y2-ts
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global y2
+$ pnpm link -—global y2-ts
 ```
 
 ## Running tests

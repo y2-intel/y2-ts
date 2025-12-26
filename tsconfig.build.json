@@ -5,8 +5,8 @@
   "compilerOptions": {
     "rootDir": "./dist/src",
     "paths": {
-      "y2/*": ["./dist/src/*"],
-      "y2": ["./dist/src/index.ts"]
+      "y2-ts/*": ["./dist/src/*"],
+      "y2-ts": ["./dist/src/index.ts"]
     },
     "noEmit": false,
     "declaration": true,
