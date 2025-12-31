@@ -4,7 +4,7 @@
 
 This library provides convenient access to the Y2 REST API from server-side TypeScript or JavaScript.
 
-The REST API documentation can be found on [y2.yeetum.com](https://y2.yeetum.com). The full API of this library can be found in [api.md](api.md).
+The REST API documentation can be found on [y2.dev](https://y2.dev/docs/). The full API of this library can be found in [api.md](api.md).
 
 It is generated with [Stainless](https://www.stainless.com/).
 
