@@ -148,7 +148,7 @@ export class Y2 {
    * API Client for interfacing with the Y2 API.
    *
    * @param {string | undefined} [opts.apiKey=process.env['Y2_API_KEY'] ?? undefined]
-   * @param {string} [opts.baseURL=process.env['Y2_BASE_URL'] ?? https://api.y2.dev/v1] - Override the default base URL for the API.
+   * @param {string} [opts.baseURL=process.env['Y2_BASE_URL'] ?? https://api.y2.dev/api/v1] - Override the default base URL for the API.
    * @param {number} [opts.timeout=1 minute] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
    * @param {MergedRequestInit} [opts.fetchOptions] - Additional `RequestInit` options to be passed to `fetch` calls.
    * @param {Fetch} [opts.fetch] - Specify a custom `fetch` function implementation.
@@ -170,7 +170,7 @@ export class Y2 {
     const options: ClientOptions = {
       apiKey,
       ...opts,
-      baseURL: baseURL || `https://api.y2.dev/v1`,
+      baseURL: baseURL || `https://api.y2.dev/api/v1`,
     };
 
     this.baseURL = options.baseURL!;
@@ -216,7 +216,7 @@ export class Y2 {
    * Check whether the base URL is set to its default.
    */
   #baseURLOverridden(): boolean {
-    return this.baseURL !== 'https://api.y2.dev/v1';
+    return this.baseURL !== 'https://api.y2.dev/api/v1';
   }
 
   protected defaultQuery(): Record<string, string | undefined> | undefined {

@@ -298,13 +298,13 @@ describe('instantiate client', () => {
     test('empty env variable', () => {
       process.env['Y2_BASE_URL'] = ''; // empty
       const client = new Y2({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.y2.dev/v1');
+      expect(client.baseURL).toEqual('https://api.y2.dev/api/v1');
     });
 
     test('blank env variable', () => {
       process.env['Y2_BASE_URL'] = '  '; // blank
       const client = new Y2({ apiKey: 'My API Key' });
-      expect(client.baseURL).toEqual('https://api.y2.dev/v1');
+      expect(client.baseURL).toEqual('https://api.y2.dev/api/v1');
     });
 
     test('in request options', () => {
