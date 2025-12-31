@@ -8,8 +8,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "paths": {
-      "y2-ts/*": ["./src/*"],
-      "y2-ts": ["./src/index.ts"]
+      "y2-sdk/*": ["./src/*"],
+      "y2-sdk": ["./src/index.ts"]
     },
     "noEmit": true,
 

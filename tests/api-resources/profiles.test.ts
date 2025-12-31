@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-import Y2 from 'y2-ts';
+import Y2 from 'y2-sdk';
 
 const client = new Y2({
   apiKey: 'My API Key',
