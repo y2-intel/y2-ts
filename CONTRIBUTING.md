@@ -55,12 +55,12 @@ $ cd y2-ts
 # With yarn
 $ yarn link
 $ cd ../my-package
-$ yarn link y2-ts
+$ yarn link y2-sdk
 
 # With pnpm
 $ pnpm link --global
 $ cd ../my-package
-$ pnpm link -—global y2-ts
+$ pnpm link -—global y2-sdk
 ```
 
 ## Running tests

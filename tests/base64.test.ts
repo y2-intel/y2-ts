@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from 'y2-ts/internal/utils/base64';
+import { fromBase64, toBase64 } from 'y2-sdk/internal/utils/base64';
 
 describe.each(['Buffer', 'atob'])('with %s', (mode) => {
   let originalBuffer: BufferConstructor;
