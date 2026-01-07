@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.3.1 (2026-01-07)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/y2-intel/y2-ts/compare/v0.3.0...v0.3.1)
+
+### Chores
+
+* break long lines in snippets into multiline ([2fe5965](https://github.com/y2-intel/y2-ts/commit/2fe5965a9a5e543a05f24451be86560b59428702))
+* **internal:** codegen related update ([57737bc](https://github.com/y2-intel/y2-ts/commit/57737bc274eacf56d27754145db3aa5111f4117d))
+
 ## 0.3.0 (2025-12-31)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/y2-intel/y2-ts/compare/v0.2.0...v0.3.0)
