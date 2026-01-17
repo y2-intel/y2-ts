@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.1 (2026-01-17)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/y2-intel/y2-ts/compare/v0.3.0...v0.3.1)
+
+### Chores
+
+* break long lines in snippets into multiline ([2fe5965](https://github.com/y2-intel/y2-ts/commit/2fe5965a9a5e543a05f24451be86560b59428702))
+* **internal:** codegen related update ([57737bc](https://github.com/y2-intel/y2-ts/commit/57737bc274eacf56d27754145db3aa5111f4117d))
+* **internal:** update `actions/checkout` version ([30b37a1](https://github.com/y2-intel/y2-ts/commit/30b37a191b0f71b14fe5095c6a0196d3eed92887))
+* **internal:** update lock file ([dc887b2](https://github.com/y2-intel/y2-ts/commit/dc887b24aa0912e8a1bdde5a239fa5be423c11d8))
+* **internal:** upgrade babel, qs, js-yaml ([4b473bb](https://github.com/y2-intel/y2-ts/commit/4b473bb8c793cf02f869676756adf10373be3032))
+* **internal:** upgrade brace-expansion and @babel/helpers ([fb1e157](https://github.com/y2-intel/y2-ts/commit/fb1e1574afe0c7a8d05ec3bff1f68377a492404b))
+
 ## 0.3.0 (2025-12-31)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/y2-intel/y2-ts/compare/v0.2.0...v0.3.0)
