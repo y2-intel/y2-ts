@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.3.1 (2026-02-06)
+
+Full Changelog: [v0.3.0...v0.3.1](https://github.com/y2-intel/y2-ts/compare/v0.3.0...v0.3.1)
+
+### Bug Fixes
+
+* **client:** avoid memory leak with abort signals ([238222c](https://github.com/y2-intel/y2-ts/commit/238222c0297e4aecf1a945aebc6d6d186b928e34))
+* **client:** avoid removing abort listener too early ([315e282](https://github.com/y2-intel/y2-ts/commit/315e282c5fa0609364ad70aeeb4da060cac4e640))
+
+
+### Chores
+
+* break long lines in snippets into multiline ([2fe5965](https://github.com/y2-intel/y2-ts/commit/2fe5965a9a5e543a05f24451be86560b59428702))
+* **ci:** upgrade `actions/github-script` ([8b8a956](https://github.com/y2-intel/y2-ts/commit/8b8a956cdb208db90a63f1b8b308dd79e7ba36e2))
+* **client:** do not parse responses with empty content-length ([ed82a7e](https://github.com/y2-intel/y2-ts/commit/ed82a7ee730265102d42a6485a04cf1e80d72d76))
+* **client:** restructure abort controller binding ([2114e67](https://github.com/y2-intel/y2-ts/commit/2114e670f3edd779b98e5975ad68a1333206ae6b))
+* **internal:** codegen related update ([57737bc](https://github.com/y2-intel/y2-ts/commit/57737bc274eacf56d27754145db3aa5111f4117d))
+* **internal:** update `actions/checkout` version ([30b37a1](https://github.com/y2-intel/y2-ts/commit/30b37a191b0f71b14fe5095c6a0196d3eed92887))
+* **internal:** update lock file ([dc887b2](https://github.com/y2-intel/y2-ts/commit/dc887b24aa0912e8a1bdde5a239fa5be423c11d8))
+* **internal:** upgrade babel, qs, js-yaml ([4b473bb](https://github.com/y2-intel/y2-ts/commit/4b473bb8c793cf02f869676756adf10373be3032))
+* **internal:** upgrade brace-expansion and @babel/helpers ([fb1e157](https://github.com/y2-intel/y2-ts/commit/fb1e1574afe0c7a8d05ec3bff1f68377a492404b))
+* **internal:** upgrade pnpm ([b70a25c](https://github.com/y2-intel/y2-ts/commit/b70a25cee958ef6761a1c4d5771045316b99d559))
+
 ## 0.3.0 (2025-12-31)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/y2-intel/y2-ts/compare/v0.2.0...v0.3.0)
