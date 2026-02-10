@@ -10,7 +10,17 @@ export {
   type NewsListParams,
   type NewsGetRecapsParams,
 } from './news';
-export { Profiles, type ProfileListResponse } from './profiles';
+export {
+  Profiles,
+  type ProfileCreateResponse,
+  type ProfileUpdateResponse,
+  type ProfileListResponse,
+  type ProfileDeleteResponse,
+  type ProfilePartialUpdateResponse,
+  type ProfileCreateParams,
+  type ProfileUpdateParams,
+  type ProfilePartialUpdateParams,
+} from './profiles';
 export {
   Reports,
   type AudioMetadata,

@@ -26,7 +26,17 @@ import {
   TimeframeEnum,
   TopicEnum,
 } from './resources/news';
-import { ProfileListResponse, Profiles } from './resources/profiles';
+import {
+  ProfileCreateParams,
+  ProfileCreateResponse,
+  ProfileDeleteResponse,
+  ProfileListResponse,
+  ProfilePartialUpdateParams,
+  ProfilePartialUpdateResponse,
+  ProfileUpdateParams,
+  ProfileUpdateResponse,
+  Profiles,
+} from './resources/profiles';
 import {
   AudioMetadata,
   ReportListParams,
@@ -764,7 +774,17 @@ export declare namespace Y2 {
     type ReportRetrieveAudioParams as ReportRetrieveAudioParams,
   };
 
-  export { Profiles as Profiles, type ProfileListResponse as ProfileListResponse };
+  export {
+    Profiles as Profiles,
+    type ProfileCreateResponse as ProfileCreateResponse,
+    type ProfileUpdateResponse as ProfileUpdateResponse,
+    type ProfileListResponse as ProfileListResponse,
+    type ProfileDeleteResponse as ProfileDeleteResponse,
+    type ProfilePartialUpdateResponse as ProfilePartialUpdateResponse,
+    type ProfileCreateParams as ProfileCreateParams,
+    type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfilePartialUpdateParams as ProfilePartialUpdateParams,
+  };
 
   export {
     News as News,
