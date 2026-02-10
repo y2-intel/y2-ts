@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0 (2026-02-10)
+
+Full Changelog: [v0.3.1...v0.4.0](https://github.com/y2-intel/y2-ts/compare/v0.3.1...v0.4.0)
+
+### Features
+
+* **api:** manual updates ([c9a30cc](https://github.com/y2-intel/y2-ts/commit/c9a30cc6b345e57716de2e0f576a99e36b625bc8))
+
 ## 0.3.1 (2026-02-06)
 
 Full Changelog: [v0.3.0...v0.3.1](https://github.com/y2-intel/y2-ts/compare/v0.3.0...v0.3.1)
