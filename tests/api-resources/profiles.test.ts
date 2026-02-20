@@ -8,7 +8,7 @@ const client = new Y2({
 });
 
 describe('resource profiles', () => {
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: only required params', async () => {
     const responsePromise = client.profiles.create({
       frequency: 'daily',
@@ -25,7 +25,7 @@ describe('resource profiles', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('create: required and optional params', async () => {
     const response = await client.profiles.create({
       frequency: 'daily',
@@ -46,7 +46,7 @@ describe('resource profiles', () => {
     });
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('update', async () => {
     const responsePromise = client.profiles.update('k57abc123def456', {});
     const rawResponse = await responsePromise.asResponse();
@@ -58,7 +58,7 @@ describe('resource profiles', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('list', async () => {
     const responsePromise = client.profiles.list();
     const rawResponse = await responsePromise.asResponse();
@@ -70,7 +70,7 @@ describe('resource profiles', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('delete', async () => {
     const responsePromise = client.profiles.delete('k57abc123def456');
     const rawResponse = await responsePromise.asResponse();
@@ -82,7 +82,7 @@ describe('resource profiles', () => {
     expect(dataAndResponse.response).toBe(rawResponse);
   });
 
-  // Prism tests are disabled
+  // Mock server tests are disabled
   test.skip('partialUpdate', async () => {
     const responsePromise = client.profiles.partialUpdate('k57abc123def456', {});
     const rawResponse = await responsePromise.asResponse();
