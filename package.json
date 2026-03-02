@@ -1,6 +1,6 @@
 {
   "name": "y2-sdk",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "The official TypeScript library for the Y2 API",
   "author": "Y2 <>",
   "types": "dist/index.d.ts",
@@ -8,7 +8,7 @@
   "type": "commonjs",
   "repository": "github:y2-intel/y2-ts",
   "license": "Apache-2.0",
-  "packageManager": "pnpm@10.27.0",
+  "packageManager": "pnpm@10.30.1",
   "files": [
     "**/*"
   ],

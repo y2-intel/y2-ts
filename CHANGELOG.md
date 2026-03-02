@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.4.1 (2026-02-27)
+
+Full Changelog: [v0.4.0...v0.4.1](https://github.com/y2-intel/y2-ts/compare/v0.4.0...v0.4.1)
+
+### Bug Fixes
+
+* **docs/contributing:** correct pnpm link command ([df9dd49](https://github.com/y2-intel/y2-ts/commit/df9dd49c04ae3bc8260f6d592cd4ebe886a83d60))
+
+
+### Chores
+
+* **internal/client:** fix form-urlencoded requests ([ad3b0d6](https://github.com/y2-intel/y2-ts/commit/ad3b0d600da2c08f7af91a592a5281ec001ca795))
+* **internal:** avoid type checking errors with ts-reset ([fc898be](https://github.com/y2-intel/y2-ts/commit/fc898be03cfb675dfc0e37cf983f355e0be137f2))
+* **internal:** move stringifyQuery implementation to internal function ([40e6092](https://github.com/y2-intel/y2-ts/commit/40e609211719d24bbb485b77d3b405f18be449c7))
+* **internal:** remove mock server code ([7106a67](https://github.com/y2-intel/y2-ts/commit/7106a6706f09a8011903c284d54b594554083bea))
+* **internal:** upgrade pnpm version ([40c27b7](https://github.com/y2-intel/y2-ts/commit/40c27b72d72cee3fac71eeb84d6daa845a7bcb91))
+* update mock server docs ([67767d1](https://github.com/y2-intel/y2-ts/commit/67767d1ca233817675ac65ec90c30764bbab74a2))
+
 ## 0.4.0 (2026-02-10)
 
 Full Changelog: [v0.3.1...v0.4.0](https://github.com/y2-intel/y2-ts/compare/v0.3.1...v0.4.0)
