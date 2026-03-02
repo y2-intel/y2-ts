@@ -156,11 +156,37 @@ export namespace ProfileListResponse {
     export interface Profile {
       audioEnabled?: boolean;
 
+      blufStructure?: string;
+
+      brandingTemplateId?: string;
+
+      budgetConfig?: unknown;
+
+      cronConfig?: unknown;
+
+      customPrompt?: string;
+
       frequency?: string;
+
+      freshnessConfig?: unknown;
+
+      isCommunity?: boolean;
+
+      isGlobal?: boolean;
+
+      modelConfig?: unknown;
 
       name?: string;
 
+      recursionConfig?: unknown;
+
+      searchConfig?: unknown;
+
       status?: string;
+
+      tags?: Array<string>;
+
+      toolConfig?: unknown;
 
       topic?: string;
     }
@@ -229,9 +255,24 @@ export interface ProfileCreateParams {
   topic: string;
 
   /**
+   * Audio generation configuration
+   */
+  audioConfig?: ProfileCreateParams.AudioConfig;
+
+  /**
    * Custom BLUF report structure template
    */
   blufStructure?: string;
+
+  /**
+   * Branding template ID (Pro feature)
+   */
+  brandingTemplateId?: string;
+
+  /**
+   * Cost budget configuration
+   */
+  budgetConfig?: ProfileCreateParams.BudgetConfig;
 
   /**
    * Custom system prompt for the AI analyst
@@ -239,9 +280,19 @@ export interface ProfileCreateParams {
   customPrompt?: string;
 
   /**
+   * Source freshness configuration
+   */
+  freshnessConfig?: ProfileCreateParams.FreshnessConfig;
+
+  /**
    * Whether this is a community (public) profile
    */
   isCommunity?: boolean;
+
+  /**
+   * AI model configuration
+   */
+  modelConfig?: ProfileCreateParams.ModelConfig;
 
   recursionConfig?: ProfileCreateParams.RecursionConfig;
 
@@ -256,18 +307,91 @@ export interface ProfileCreateParams {
   scheduleDayOfWeek?: string;
 
   /**
+   * Web search configuration
+   */
+  searchConfig?: ProfileCreateParams.SearchConfig;
+
+  /**
    * Tags for categorization
    */
   tags?: Array<string>;
+
+  /**
+   * Tool configuration for report generation
+   */
+  toolConfig?: unknown;
 }
 
 export namespace ProfileCreateParams {
+  /**
+   * Audio generation configuration
+   */
+  export interface AudioConfig {
+    enabled?: boolean;
+
+    speed?: number;
+
+    voiceId?: string;
+  }
+
+  /**
+   * Cost budget configuration
+   */
+  export interface BudgetConfig {
+    alertThreshold?: number;
+
+    maxCostPerReport?: number;
+  }
+
+  /**
+   * Source freshness configuration
+   */
+  export interface FreshnessConfig {
+    enabled?: boolean;
+
+    maxAgeMs?: number;
+
+    preferRecentSources?: boolean;
+
+    recencyWeight?: number;
+
+    validateLinks?: boolean;
+  }
+
+  /**
+   * AI model configuration
+   */
+  export interface ModelConfig {
+    maxOutputTokens?: number;
+
+    modelId?: string;
+
+    temperature?: number;
+  }
+
   export interface RecursionConfig {
     enabled: boolean;
 
     maxDepth: number;
 
     strategy: 'breadth-first' | 'depth-first' | 'hybrid';
+  }
+
+  /**
+   * Web search configuration
+   */
+  export interface SearchConfig {
+    excludeDomains?: Array<string>;
+
+    includeDomains?: Array<string>;
+
+    maxResults?: number;
+
+    searchDepth?: 'basic' | 'advanced';
+
+    timeRange?: string;
+
+    topic?: string;
   }
 }
 
