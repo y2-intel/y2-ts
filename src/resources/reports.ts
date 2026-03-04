@@ -6,6 +6,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Intelligence report operations
+ */
 export class Reports extends APIResource {
   /**
    * Returns the full content of a specific intelligence report, including HTML
