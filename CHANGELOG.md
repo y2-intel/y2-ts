@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.5.0 (2026-03-04)
+
+Full Changelog: [v0.4.1...v0.5.0](https://github.com/y2-intel/y2-ts/compare/v0.4.1...v0.5.0)
+
+### Features
+
+* **api:** api update ([a819bff](https://github.com/y2-intel/y2-ts/commit/a819bfff5ecd4ceb5e3646d2a4687f4c3ce25669))
+
+
+### Chores
+
+* **internal:** codegen related update ([31d5532](https://github.com/y2-intel/y2-ts/commit/31d5532a094dd2cd5285bc173646077107f6609a))
+
 ## 0.4.1 (2026-02-27)
 
 Full Changelog: [v0.4.0...v0.4.1](https://github.com/y2-intel/y2-ts/compare/v0.4.0...v0.4.1)
