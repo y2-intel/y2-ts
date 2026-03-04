@@ -5,6 +5,9 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
+/**
+ * Subscription profile operations
+ */
 export class Profiles extends APIResource {
   /**
    * Creates a new intelligence profile with the specified configuration. The profile
