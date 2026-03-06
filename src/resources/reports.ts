@@ -247,7 +247,7 @@ export interface ReportRetrieveAudioResponse {
 
 export interface ReportListParams {
   /**
-   * Maximum number of reports to return
+   * Maximum number of reports to return (hard-capped at 5)
    */
   limit?: number;
 
