@@ -47,6 +47,38 @@ import {
   ReportRetrieveResponse,
   Reports,
 } from './resources/reports';
+import {
+  SubscriptionUpdateDeliveryParams,
+  SubscriptionUpdateDeliveryResponse,
+  Subscriptions,
+} from './resources/subscriptions';
+import {
+  WebhookCreateParams,
+  WebhookCreateResponse,
+  WebhookDeleteResponse,
+  WebhookListResponse,
+  WebhookTestResponse,
+  WebhookUpdateParams,
+  WebhookUpdateResponse,
+  Webhooks,
+} from './resources/webhooks';
+import {
+  Osint,
+  OsintGetConflictIndicatorsParams,
+  OsintGetConflictIndicatorsResponse,
+  OsintGetGpsJammingZonesParams,
+  OsintGetGpsJammingZonesResponse,
+  OsintGetMilitaryPostureParams,
+  OsintGetMilitaryPostureResponse,
+  OsintListAircraftParams,
+  OsintListAircraftResponse,
+  OsintListEventsParams,
+  OsintListEventsResponse,
+  OsintListVesselsParams,
+  OsintListVesselsResponse,
+  OsintMapEventsParams,
+  OsintMapEventsResponse,
+} from './resources/osint/osint';
 import { type Fetch } from './internal/builtin-types';
 import { HeadersLike, NullableHeaders, buildHeaders } from './internal/headers';
 import { FinalRequestOptions, RequestOptions } from './internal/request-options';
@@ -760,11 +792,26 @@ export class Y2 {
    * GloriaAI news terminal operations
    */
   news: API.News = new API.News(this);
+  /**
+   * Webhook configuration management (Pro feature)
+   */
+  webhooks: API.Webhooks = new API.Webhooks(this);
+  /**
+   * Subscription delivery management
+   */
+  subscriptions: API.Subscriptions = new API.Subscriptions(this);
+  /**
+   * Situation Room OSINT intelligence operations
+   */
+  osint: API.Osint = new API.Osint(this);
 }
 
 Y2.Reports = Reports;
 Y2.Profiles = Profiles;
 Y2.News = News;
+Y2.Webhooks = Webhooks;
+Y2.Subscriptions = Subscriptions;
+Y2.Osint = Osint;
 
 export declare namespace Y2 {
   export type RequestOptions = Opts.RequestOptions;
@@ -800,5 +847,40 @@ export declare namespace Y2 {
     type NewsListFeedsResponse as NewsListFeedsResponse,
     type NewsListParams as NewsListParams,
     type NewsGetRecapsParams as NewsGetRecapsParams,
+  };
+
+  export {
+    Webhooks as Webhooks,
+    type WebhookCreateResponse as WebhookCreateResponse,
+    type WebhookUpdateResponse as WebhookUpdateResponse,
+    type WebhookListResponse as WebhookListResponse,
+    type WebhookDeleteResponse as WebhookDeleteResponse,
+    type WebhookTestResponse as WebhookTestResponse,
+    type WebhookCreateParams as WebhookCreateParams,
+    type WebhookUpdateParams as WebhookUpdateParams,
+  };
+
+  export {
+    Subscriptions as Subscriptions,
+    type SubscriptionUpdateDeliveryResponse as SubscriptionUpdateDeliveryResponse,
+    type SubscriptionUpdateDeliveryParams as SubscriptionUpdateDeliveryParams,
+  };
+
+  export {
+    Osint as Osint,
+    type OsintGetConflictIndicatorsResponse as OsintGetConflictIndicatorsResponse,
+    type OsintGetGpsJammingZonesResponse as OsintGetGpsJammingZonesResponse,
+    type OsintGetMilitaryPostureResponse as OsintGetMilitaryPostureResponse,
+    type OsintListAircraftResponse as OsintListAircraftResponse,
+    type OsintListEventsResponse as OsintListEventsResponse,
+    type OsintListVesselsResponse as OsintListVesselsResponse,
+    type OsintMapEventsResponse as OsintMapEventsResponse,
+    type OsintGetConflictIndicatorsParams as OsintGetConflictIndicatorsParams,
+    type OsintGetGpsJammingZonesParams as OsintGetGpsJammingZonesParams,
+    type OsintGetMilitaryPostureParams as OsintGetMilitaryPostureParams,
+    type OsintListAircraftParams as OsintListAircraftParams,
+    type OsintListEventsParams as OsintListEventsParams,
+    type OsintListVesselsParams as OsintListVesselsParams,
+    type OsintMapEventsParams as OsintMapEventsParams,
   };
 }
