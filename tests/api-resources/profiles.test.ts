@@ -32,9 +32,28 @@ describe('resource profiles', () => {
       name: 'Cybersecurity Weekly',
       scheduleTimeOfDay: '09:00',
       topic: 'Cybersecurity threats, vulnerabilities, and defense strategies',
+      audioConfig: {
+        enabled: true,
+        speed: 0,
+        voiceId: 'voiceId',
+      },
       blufStructure: 'blufStructure',
+      brandingTemplateId: 'brandingTemplateId',
+      budgetConfig: { alertThreshold: 0, maxCostPerReport: 0 },
       customPrompt: 'customPrompt',
+      freshnessConfig: {
+        enabled: true,
+        maxAgeMs: 0,
+        preferRecentSources: true,
+        recencyWeight: 0,
+        validateLinks: true,
+      },
       isCommunity: true,
+      modelConfig: {
+        maxOutputTokens: 0,
+        modelId: 'modelId',
+        temperature: 0,
+      },
       recursionConfig: {
         enabled: true,
         maxDepth: 1,
@@ -42,7 +61,16 @@ describe('resource profiles', () => {
       },
       scheduleDayOfMonth: '1',
       scheduleDayOfWeek: 'monday',
+      searchConfig: {
+        excludeDomains: ['string'],
+        includeDomains: ['string'],
+        maxResults: 0,
+        searchDepth: 'basic',
+        timeRange: 'timeRange',
+        topic: 'topic',
+      },
       tags: ['string'],
+      toolConfig: {},
     });
   });
 

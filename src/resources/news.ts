@@ -5,6 +5,9 @@ import * as NewsAPI from './news';
 import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
+/**
+ * GloriaAI news terminal operations
+ */
 export class News extends APIResource {
   /**
    * Returns news items from the GloriaAI terminal cache. Supports filtering by

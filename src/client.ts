@@ -748,8 +748,17 @@ export class Y2 {
 
   static toFile = Uploads.toFile;
 
+  /**
+   * Intelligence report operations
+   */
   reports: API.Reports = new API.Reports(this);
+  /**
+   * Subscription profile operations
+   */
   profiles: API.Profiles = new API.Profiles(this);
+  /**
+   * GloriaAI news terminal operations
+   */
   news: API.News = new API.News(this);
 }
 
