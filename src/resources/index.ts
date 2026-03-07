@@ -11,6 +11,23 @@ export {
   type NewsGetRecapsParams,
 } from './news';
 export {
+  Osint,
+  type OsintGetConflictIndicatorsResponse,
+  type OsintGetGpsJammingZonesResponse,
+  type OsintGetMilitaryPostureResponse,
+  type OsintListAircraftResponse,
+  type OsintListEventsResponse,
+  type OsintListVesselsResponse,
+  type OsintMapEventsResponse,
+  type OsintGetConflictIndicatorsParams,
+  type OsintGetGpsJammingZonesParams,
+  type OsintGetMilitaryPostureParams,
+  type OsintListAircraftParams,
+  type OsintListEventsParams,
+  type OsintListVesselsParams,
+  type OsintMapEventsParams,
+} from './osint/osint';
+export {
   Profiles,
   type ProfileCreateResponse,
   type ProfileUpdateResponse,
@@ -30,3 +47,18 @@ export {
   type ReportListParams,
   type ReportRetrieveAudioParams,
 } from './reports';
+export {
+  Subscriptions,
+  type SubscriptionUpdateDeliveryResponse,
+  type SubscriptionUpdateDeliveryParams,
+} from './subscriptions';
+export {
+  Webhooks,
+  type WebhookCreateResponse,
+  type WebhookUpdateResponse,
+  type WebhookListResponse,
+  type WebhookDeleteResponse,
+  type WebhookTestResponse,
+  type WebhookCreateParams,
+  type WebhookUpdateParams,
+} from './webhooks';
