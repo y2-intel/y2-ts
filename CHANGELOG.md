@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.7.1 (2026-03-24)
+
+Full Changelog: [v0.7.0...v0.7.1](https://github.com/y2-intel/y2-ts/compare/v0.7.0...v0.7.1)
+
+### Bug Fixes
+
+* **client:** preserve URL params already embedded in path ([71c146e](https://github.com/y2-intel/y2-ts/commit/71c146e9e48c55fe836bc140e613f196661b3c33))
+
+
+### Chores
+
+* **ci:** skip uploading artifacts on stainless-internal branches ([a3c44d3](https://github.com/y2-intel/y2-ts/commit/a3c44d34a7fa22f5b35e88c5f7a8029f67e22387))
+* **internal:** tweak CI branches ([1de18a3](https://github.com/y2-intel/y2-ts/commit/1de18a3fc0f842cac5099a1e3c9cc3ee2216087c))
+* **internal:** update dependencies to address dependabot vulnerabilities ([fdbc357](https://github.com/y2-intel/y2-ts/commit/fdbc357bb0040e895e820f6cf2a199c78f170994))
+* **internal:** update gitignore ([8cc1c91](https://github.com/y2-intel/y2-ts/commit/8cc1c911393a603c200f3b401a5a16543dd9a364))
+
 ## 0.7.0 (2026-03-07)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/y2-intel/y2-ts/compare/v0.6.0...v0.7.0)
