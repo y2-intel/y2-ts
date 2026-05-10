@@ -28,6 +28,11 @@ export class Osint extends APIResource {
    * Returns the Conflict Indicators Index (CII) values. Each item represents a
    * conflict indicator with a score from 0-100 and a delta showing recent change.
    * Supports filtering by region and category.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getConflictIndicators(
     query: OsintGetConflictIndicatorsParams | null | undefined = {},
@@ -39,6 +44,24 @@ export class Osint extends APIResource {
   /**
    * Returns GPS interference zones detected via ADS-B navigation accuracy
    * degradation analysis, aggregated into H3 hex cells.
+   *
+   * Coverage spans 22 theaters with tiered refresh cadence calibrated to fit the
+   * shared Wingbits quota:
+   *
+   * | Tier      | Cadence   | Theaters                                                                                        |
+   * | --------- | --------- | ----------------------------------------------------------------------------------------------- |
+   * | Hot       | Hourly    | iran, blacksea, israelgaza, redsea, taiwan, scs                                                 |
+   * | Watch     | Every 3h  | emed, korea, caucasus, kaliningrad-tight, finland-russia, us-south, bashi-luzon, east-china-sea |
+   * | Perimeter | Every 6h  | us-pacom-west, us-northeast, aleutian-bering, baltic-south, giuk-greenland                      |
+   * | Daily     | Every 24h | baltic-north, us-north, arctic-greenland-pass                                                   |
+   *
+   * Records expire 30 minutes after fetch; clients polling for fresh interference
+   * zones should align polling cadence to the tier of interest.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getGpsJammingZones(
     query: OsintGetGpsJammingZonesParams | null | undefined = {},
@@ -49,8 +72,19 @@ export class Osint extends APIResource {
 
   /**
    * Returns military posture assessments for monitored theaters, based on detected
-   * military aircraft activity from the OpenSky Network. Each theater has a posture
-   * level (normal, elevated, critical) and aircraft breakdown by type.
+   * military aircraft activity from the Wingbits ADS-B network. Each theater has a
+   * posture level (normal, elevated, critical) and aircraft breakdown by type.
+   *
+   * > **Status (May 2026):** Posture is computed from the aircraft tracking
+   * > pipeline, which is temporarily feature-flagged off to conserve the shared
+   * > Wingbits quota. This endpoint remains available but may return empty or stale
+   * > results until aircraft ingestion is re-enabled. GPS jamming
+   * > (`/osint/gps-jamming`) is unaffected.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getMilitaryPosture(
     query: OsintGetMilitaryPostureParams | null | undefined = {},
@@ -60,8 +94,18 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns tracked military aircraft positions from the OpenSky Network, filtered
-   * and classified by type (tanker, AWACS, fighter, etc.).
+   * Returns tracked military aircraft positions from the Wingbits ADS-B network,
+   * filtered and classified by type (tanker, AWACS, fighter, etc.).
+   *
+   * > **Status (May 2026):** Aircraft ingestion is temporarily feature-flagged off
+   * > to dedicate the shared Wingbits quota to GPS interference detection. This
+   * > endpoint remains available but may return empty or stale results until
+   * > ingestion is re-enabled. GPS jamming (`/osint/gps-jamming`) is unaffected.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   listAircraft(
     query: OsintListAircraftParams | null | undefined = {},
@@ -73,6 +117,11 @@ export class Osint extends APIResource {
   /**
    * Returns OSINT threat events from the Situation Room. Supports filtering by
    * category, severity, region, and country.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   listEvents(
     query: OsintListEventsParams | null | undefined = {},
@@ -84,6 +133,11 @@ export class Osint extends APIResource {
   /**
    * Returns naval vessel positions sourced from USNI fleet tracker data, including
    * carrier strike groups and individual warships.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   listVessels(
     query: OsintListVesselsParams | null | undefined = {},
@@ -95,6 +149,11 @@ export class Osint extends APIResource {
   /**
    * Returns OSINT events with geographic coordinates for map display. Events without
    * coordinates are excluded.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   mapEvents(
     query: OsintMapEventsParams | null | undefined = {},
@@ -278,7 +337,7 @@ export namespace OsintGetMilitaryPostureResponse {
     posture: 'normal' | 'elevated' | 'critical';
 
     /**
-     * Theater name (e.g. "iran", "taiwan", "baltic")
+     * Theater name (e.g. "iran", "taiwan", "blacksea", "scs")
      */
     theater: string;
 
@@ -522,6 +581,13 @@ export namespace OsintListEventsResponse {
     locationName?: string;
 
     /**
+     * Extraction provenance metadata. Populated only when
+     * `sourceType === "y2_report"`; null for all other sources. Returned by
+     * `/osint/regional`.
+     */
+    provenance?: Data.Provenance;
+
+    /**
      * Geographic region identifier
      */
     region?: 'mena' | 'africa' | 'latam' | 'asiapac' | 'europe' | 'namerica';
@@ -546,6 +612,47 @@ export namespace OsintListEventsResponse {
        * Longitude
        */
       lon?: number;
+    }
+
+    /**
+     * Extraction provenance metadata. Populated only when
+     * `sourceType === "y2_report"`; null for all other sources. Returned by
+     * `/osint/regional`.
+     */
+    export interface Provenance {
+      /**
+       * Source identifier (always "y2_report")
+       */
+      source: 'y2_report';
+
+      /**
+       * Event temporal classification from GroundSource methodology
+       */
+      classification?: 'ongoing' | 'past' | 'forecast' | 'analysis';
+
+      /**
+       * Extraction confidence score (0.5-1.0)
+       */
+      confidence?: number;
+
+      /**
+       * Named entities extracted from the report
+       */
+      entities?: Array<Provenance.Entity>;
+    }
+
+    export namespace Provenance {
+      export interface Entity {
+        /**
+         * Entity name
+         */
+        name: string;
+
+        /**
+         * Entity type
+         */
+        type: 'person' | 'organization' | 'country' | 'location';
+      }
     }
   }
 
@@ -848,7 +955,7 @@ export interface OsintListAircraftParams {
   limit?: number;
 
   /**
-   * Filter by theater ID (e.g. "iran", "taiwan", "baltic")
+   * Filter by theater ID (e.g. "iran", "taiwan", "blacksea", "scs")
    */
   theater?: string;
 }
