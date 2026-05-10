@@ -13,6 +13,11 @@ export class Reports extends APIResource {
   /**
    * Returns the full content of a specific intelligence report, including HTML
    * content, sources, and audio metadata.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   retrieve(reportID: string, options?: RequestOptions): APIPromise<ReportRetrieveResponse> {
     return this._client.get(path`/reports/${reportID}`, options);
@@ -21,6 +26,11 @@ export class Reports extends APIResource {
   /**
    * Returns a list of reports for the user's subscribed profiles. Results are sorted
    * by generation date (newest first).
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   list(
     query: ReportListParams | null | undefined = {},
@@ -32,6 +42,11 @@ export class Reports extends APIResource {
   /**
    * Returns audio file metadata or redirects to the CDN URL. Requires the
    * `reports:audio` scope.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   retrieveAudio(
     reportID: string,

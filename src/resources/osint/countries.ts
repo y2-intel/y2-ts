@@ -12,6 +12,11 @@ export class Countries extends APIResource {
   /**
    * Returns the per-country Conflict Indicators Index (CII) score, including
    * baseline, delta, and component breakdown.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getCountryInstabilityIndex(
     countryCode: string,
@@ -23,6 +28,11 @@ export class Countries extends APIResource {
   /**
    * Returns recent news items specific to a given country, sourced from the OSINT
    * event pipeline.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getCountryNews(
     countryCode: string,
@@ -35,6 +45,11 @@ export class Countries extends APIResource {
   /**
    * Returns an AI-generated intelligence brief for a specific country. Briefs are
    * generated periodically and cached.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getIntelligenceBrief(
     countryCode: string,
@@ -46,6 +61,11 @@ export class Countries extends APIResource {
   /**
    * Returns prediction market data for a specific country, including probabilities
    * and trading volumes.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getPredictionMarkets(
     countryCode: string,
@@ -58,6 +78,11 @@ export class Countries extends APIResource {
   /**
    * Returns the primary stock market index data for a specific country, including
    * weekly change and currency.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getStockMarketIndex(
     countryCode: string,
@@ -235,6 +260,11 @@ export namespace CountryGetIntelligenceBriefResponse {
   }
 }
 
+/**
+ * Response wrapper for `/osint/countries/{countryCode}/predictions`. See
+ * `PredictionMarketListResponse` for the unified Polymarket+Kalshi response
+ * wrapper used by `/osint/prediction-markets`.
+ */
 export interface CountryGetPredictionMarketsResponse {
   data: Array<CountryGetPredictionMarketsResponse.Data>;
 
@@ -242,6 +272,12 @@ export interface CountryGetPredictionMarketsResponse {
 }
 
 export namespace CountryGetPredictionMarketsResponse {
+  /**
+   * Polymarket-only prediction market shape returned by
+   * `/osint/countries/{countryCode}/predictions`. The unified Polymarket+Kalshi
+   * shape returned by `/osint/prediction-markets` is documented separately as
+   * `PredictionMarket`.
+   */
   export interface Data {
     /**
      * Prediction market identifier
