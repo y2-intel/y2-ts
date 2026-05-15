@@ -268,7 +268,7 @@ export interface ProfileCreateParams {
   blufStructure?: string;
 
   /**
-   * Branding template ID (Pro feature)
+   * Branding template ID (Lite and Pro feature)
    */
   brandingTemplateId?: string;
 
@@ -404,7 +404,7 @@ export interface ProfileUpdateParams {
   blufStructure?: string;
 
   /**
-   * Branding template ID (Pro feature)
+   * Branding template ID (Lite and Pro feature)
    */
   brandingTemplateId?: string;
 
@@ -509,7 +509,7 @@ export interface ProfilePartialUpdateParams {
   blufStructure?: string;
 
   /**
-   * Branding template ID (Pro feature)
+   * Branding template ID (Lite and Pro feature)
    */
   brandingTemplateId?: string;
 
