@@ -12,6 +12,11 @@ export class News extends APIResource {
   /**
    * Returns news items from the GloriaAI terminal cache. Supports filtering by
    * topics and pagination.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   list(
     query: NewsListParams | null | undefined = {},
@@ -23,6 +28,11 @@ export class News extends APIResource {
   /**
    * Returns AI-generated recap summaries for specified topics within a given
    * timeframe.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getRecaps(
     query: NewsGetRecapsParams | null | undefined = {},
@@ -33,6 +43,11 @@ export class News extends APIResource {
 
   /**
    * Returns all available news feed topics with descriptions.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   listFeeds(options?: RequestOptions): APIPromise<NewsListFeedsResponse> {
     return this._client.get('/news/feeds', options);
@@ -50,7 +65,6 @@ export type TimeframeEnum = '12h' | '24h' | '3d' | '7d';
 export type TopicEnum =
   | 'ai'
   | 'ai_agents'
-  | 'aptos'
   | 'base'
   | 'bitcoin'
   | 'crypto'
@@ -60,12 +74,13 @@ export type TopicEnum =
   | 'hyperliquid'
   | 'machine_learning'
   | 'macro'
-  | 'ondo'
+  | 'on_chain_whale'
   | 'perps'
   | 'ripple'
   | 'rwa'
   | 'solana'
   | 'tech'
+  | 'token_listings'
   | 'virtuals';
 
 export interface NewsListResponse {
@@ -185,10 +200,10 @@ export interface NewsListParams {
   limit?: number;
 
   /**
-   * Comma-separated list of topics to filter by. Valid topics: ai, ai_agents, aptos,
-   * base, bitcoin, crypto, dats, defi, ethereum, hyperliquid, machine_learning,
-   * macro, ondo, perps, ripple, rwa, solana, tech, virtuals. Default: crypto,
-   * ai_agents, macro, bitcoin, ethereum, tech
+   * Comma-separated list of topics to filter by. Valid topics: ai, ai_agents, base,
+   * bitcoin, crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
+   * on_chain_whale, perps, ripple, rwa, solana, tech, token_listings, virtuals.
+   * Default: crypto, ai_agents, macro, bitcoin, ethereum, tech
    */
   topics?: string;
 }
@@ -200,9 +215,9 @@ export interface NewsGetRecapsParams {
   timeframe?: TimeframeEnum;
 
   /**
-   * Comma-separated list of topics. Valid topics: ai, ai_agents, aptos, base,
-   * bitcoin, crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
-   * ondo, perps, ripple, rwa, solana, tech, virtuals
+   * Comma-separated list of topics. Valid topics: ai, ai_agents, base, bitcoin,
+   * crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
+   * on_chain_whale, perps, ripple, rwa, solana, tech, token_listings, virtuals
    */
   topics?: string;
 }

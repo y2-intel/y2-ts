@@ -11,6 +11,11 @@ export class Sources extends APIResource {
   /**
    * Returns the health status of all OSINT data sources, including circuit breaker
    * state and failure counts.
+   *
+   * This endpoint also supports x402 pay-per-request access. Requests with a valid
+   * Bearer token use the normal API-key flow. Requests without Authorization return
+   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * `PAYMENT-SIGNATURE`.
    */
   getDataSourceHealth(options?: RequestOptions): APIPromise<SourceGetDataSourceHealthResponse> {
     return this._client.get('/osint/sources/status', options);
