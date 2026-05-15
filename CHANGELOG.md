@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.8.0 (2026-05-15)
+
+Full Changelog: [v0.7.1...v0.8.0](https://github.com/y2-intel/y2-ts/compare/v0.7.1...v0.8.0)
+
+### Features
+
+* **api:** api update ([91f1da3](https://github.com/y2-intel/y2-ts/commit/91f1da3183c970dc2cb3e24fbaf65eb630553ae9))
+* support setting headers via env ([c0445f5](https://github.com/y2-intel/y2-ts/commit/c0445f5d30622f9838b1894b5da8916a87823cb2))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([d45a85f](https://github.com/y2-intel/y2-ts/commit/d45a85ff9979e0f354f118eb4a27f2f7481ced38))
+* **format:** run eslint and prettier separately ([e497cc2](https://github.com/y2-intel/y2-ts/commit/e497cc20b1dffce111945c9d8375f3778e51fe9a))
+* **internal:** codegen related update ([9d9ca4e](https://github.com/y2-intel/y2-ts/commit/9d9ca4e64313650b5f9bb2a4bd91a64668e1d44b))
+* **internal:** codegen related update ([b139445](https://github.com/y2-intel/y2-ts/commit/b1394457705baf47cec853bed85c121ec62cc7b2))
+* **internal:** more robust bootstrap script ([37ac6fa](https://github.com/y2-intel/y2-ts/commit/37ac6fa49d0b6b530802a167ef568e1c1f35de40))
+* redact api-key headers in debug logs ([7d09c68](https://github.com/y2-intel/y2-ts/commit/7d09c68d5e62d7163384fdf6061f2482945aa53c))
+
 ## 0.7.1 (2026-03-24)
 
 Full Changelog: [v0.7.0...v0.7.1](https://github.com/y2-intel/y2-ts/compare/v0.7.0...v0.7.1)
