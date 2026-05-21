@@ -106,6 +106,8 @@ export namespace ReportRetrieveResponse {
 
     audio?: ReportsAPI.AudioMetadata | null;
 
+    intelligence?: Data.Intelligence;
+
     metadata?: Data.Metadata;
 
     profileName?: string;
@@ -128,6 +130,185 @@ export namespace ReportRetrieveResponse {
        * SMS-friendly summary
        */
       summary?: string;
+    }
+
+    export interface Intelligence {
+      ontologyGraph?: Intelligence.OntologyGraph | null;
+
+      sigint?: Intelligence.Sigint | null;
+    }
+
+    export namespace Intelligence {
+      export interface OntologyGraph {
+        citations: Array<string>;
+
+        edges: Array<OntologyGraph.Edge>;
+
+        /**
+         * Graph extraction timestamp in milliseconds
+         */
+        generatedAt: number;
+
+        incidents: Array<OntologyGraph.Incident>;
+
+        nodes: Array<OntologyGraph.Node>;
+
+        source: 'y2_report_graph';
+
+        summary: string;
+
+        model?: string;
+
+        promptVersion?: string;
+
+        topic?: string;
+      }
+
+      export namespace OntologyGraph {
+        export interface Edge {
+          /**
+           * Report-local graph edge ID
+           */
+          id: string;
+
+          confidence: number;
+
+          /**
+           * Source report-local node ID
+           */
+          from: string;
+
+          fromLabel: string;
+
+          kind: string;
+
+          /**
+           * Target report-local node ID
+           */
+          to: string;
+
+          toLabel: string;
+
+          evidenceUrl?: string;
+        }
+
+        export interface Incident {
+          /**
+           * Report-local incident anchor ID
+           */
+          id: string;
+
+          category: string;
+
+          citedUrls: Array<string>;
+
+          eventTime: number;
+
+          involvedNodeIds: Array<string>;
+
+          severity: string;
+
+          title: string;
+
+          /**
+           * Linked ontology incident ID, when resolved
+           */
+          incidentId?: string;
+        }
+
+        export interface Node {
+          /**
+           * Report-local graph node ID
+           */
+          id: string;
+
+          evidenceUrls: Array<string>;
+
+          kind: string;
+
+          label: string;
+
+          /**
+           * Linked ontology entity ID, when resolved
+           */
+          entityId?: string;
+
+          summary?: string;
+        }
+      }
+
+      export interface Sigint {
+        signals: Array<Sigint.Signal>;
+
+        /**
+         * Signal extraction timestamp in milliseconds
+         */
+        generatedAt?: number;
+
+        /**
+         * One-sentence summary of the dominant emergent signal set
+         */
+        summary?: string;
+      }
+
+      export namespace Sigint {
+        export interface Signal {
+          actionType:
+            | 'invest'
+            | 'patch'
+            | 'upgrade'
+            | 'strategy'
+            | 'hedge'
+            | 'monitor'
+            | 'mitigate'
+            | 'escalate'
+            | 'defer'
+            | 'allocate';
+
+          confidence: number;
+
+          /**
+           * Candidate action or decision hypothesis
+           */
+          decision: string;
+
+          domain:
+            | 'cyber'
+            | 'markets'
+            | 'geopolitical'
+            | 'operational'
+            | 'supply_chain'
+            | 'policy'
+            | 'military'
+            | 'technology'
+            | 'other';
+
+          entityNames: Array<string>;
+
+          evidenceUrls: Array<string>;
+
+          inferenceType: 'observed' | 'inferred' | 'speculative';
+
+          /**
+           * Evidence-grounded rationale
+           */
+          justification: string;
+
+          priority: 'low' | 'medium' | 'high' | 'critical';
+
+          /**
+           * Concise statement of the inferred signal
+           */
+          signal: string;
+
+          timeHorizon: 'immediate' | 'near_term' | 'mid_term' | 'long_term';
+
+          /**
+           * Short signal title
+           */
+          title: string;
+        }
+      }
     }
 
     export interface Metadata {
@@ -233,6 +414,8 @@ export namespace ReportListResponse {
      */
     hasAudio?: boolean;
 
+    intelligence?: Data.Intelligence;
+
     /**
      * LLM model used for generation
      */
@@ -247,6 +430,27 @@ export namespace ReportListResponse {
      * Report topic
      */
     topic?: string;
+  }
+
+  export namespace Data {
+    export interface Intelligence {
+      ontologyGraph?: Intelligence.OntologyGraph | null;
+
+      /**
+       * Number of emergent SIGINT signals attached to the report
+       */
+      sigintSignalCount?: number;
+    }
+
+    export namespace Intelligence {
+      export interface OntologyGraph {
+        edgeCount?: number;
+
+        incidentCount?: number;
+
+        nodeCount?: number;
+      }
+    }
   }
 
   export interface Meta {
