@@ -806,7 +806,7 @@ export class Y2 {
    */
   news: API.News = new API.News(this);
   /**
-   * Webhook configuration management (Lite and Pro feature)
+   * Webhook configuration management for paid workspaces
    */
   webhooks: API.Webhooks = new API.Webhooks(this);
   /**

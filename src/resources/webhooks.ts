@@ -6,12 +6,12 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Webhook configuration management (Lite and Pro feature)
+ * Webhook configuration management for paid workspaces
  */
 export class Webhooks extends APIResource {
   /**
-   * Creates a new webhook configuration. Requires an active Lite or Pro
-   * subscription. The webhook URL must be HTTPS and pass SSRF security validation.
+   * Creates a new webhook configuration. Requires a paid workspace plan with webhook
+   * access. The webhook URL must be HTTPS and pass SSRF security validation.
    *
    * @example
    * ```ts
