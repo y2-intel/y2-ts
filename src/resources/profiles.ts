@@ -152,6 +152,11 @@ export namespace ProfileListResponse {
 
     subscriptionId: string;
 
+    /**
+     * Email recipients for email-capable subscription delivery
+     */
+    emailAudience?: 'individual' | 'workspace';
+
     profile?: Data.Profile | null;
   }
 
@@ -268,7 +273,7 @@ export interface ProfileCreateParams {
   blufStructure?: string;
 
   /**
-   * Branding template ID (Lite and Pro feature)
+   * Branding template ID (paid workspace feature)
    */
   brandingTemplateId?: string;
 
@@ -404,7 +409,7 @@ export interface ProfileUpdateParams {
   blufStructure?: string;
 
   /**
-   * Branding template ID (Lite and Pro feature)
+   * Branding template ID (paid workspace feature)
    */
   brandingTemplateId?: string;
 
@@ -509,7 +514,7 @@ export interface ProfilePartialUpdateParams {
   blufStructure?: string;
 
   /**
-   * Branding template ID (Lite and Pro feature)
+   * Branding template ID (paid workspace feature)
    */
   brandingTemplateId?: string;
 

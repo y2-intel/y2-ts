@@ -26,6 +26,7 @@ describe('resource subscriptions', () => {
   test.skip('updateDelivery: required and optional params', async () => {
     const response = await client.subscriptions.updateDelivery('subscriptionId', {
       deliveryMethod: 'email',
+      emailAudience: 'individual',
       webhookConfigId: 'webhookConfigId',
     });
   });
