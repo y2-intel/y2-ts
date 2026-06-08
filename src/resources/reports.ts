@@ -307,6 +307,54 @@ export namespace ReportRetrieveResponse {
            * Short signal title
            */
           title: string;
+
+          /**
+           * Ontology-aligned signal subjects
+           */
+          subjects?: Array<Signal.Subject>;
+
+          /**
+           * Lowercase filtering tokens for domains, actions, priorities, and subjects
+           */
+          tags?: Array<string>;
+        }
+
+        export namespace Signal {
+          export interface Subject {
+            kind:
+              | 'person'
+              | 'organization'
+              | 'country'
+              | 'region'
+              | 'vessel'
+              | 'aircraft'
+              | 'facility'
+              | 'asset'
+              | 'indicator'
+              | 'cve'
+              | 'malware_family'
+              | 'threat_actor'
+              | 'vendor'
+              | 'software'
+              | 'ai_model'
+              | 'api_service'
+              | 'protocol';
+
+            /**
+             * Human-readable subject label
+             */
+            label: string;
+
+            /**
+             * Stable ontology subject key used for filtering
+             */
+            normalizedKey: string;
+
+            /**
+             * Linked ontology entity ID when resolved
+             */
+            entityId?: string;
+          }
         }
       }
     }
