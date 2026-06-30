@@ -6,12 +6,12 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * GloriaAI news terminal operations
+ * Y2 News Terminal operations
  */
 export class News extends APIResource {
   /**
-   * Returns news items from the GloriaAI terminal cache. Supports filtering by
-   * topics and pagination.
+   * Returns news items from the Y2 News Terminal cache. Supports filtering by topics
+   * and pagination.
    *
    * This endpoint also supports x402 pay-per-request access. Requests with a valid
    * Bearer token use the normal API-key flow. Requests without Authorization return
@@ -60,7 +60,7 @@ export class News extends APIResource {
 export type TimeframeEnum = '12h' | '24h' | '3d' | '7d';
 
 /**
- * Available news feed topics from GloriaAI
+ * Available Y2 News Terminal feed topics
  */
 export type TopicEnum =
   | 'ai'
@@ -173,7 +173,7 @@ export interface NewsListFeedsResponse {
 export namespace NewsListFeedsResponse {
   export interface Data {
     /**
-     * Available news feed topics from GloriaAI
+     * Available Y2 News Terminal feed topics
      */
     id: NewsAPI.TopicEnum;
 
