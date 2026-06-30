@@ -810,7 +810,7 @@ export class Y2 {
    */
   profiles: API.Profiles = new API.Profiles(this);
   /**
-   * GloriaAI news terminal operations
+   * Y2 News Terminal operations
    */
   news: API.News = new API.News(this);
   /**
