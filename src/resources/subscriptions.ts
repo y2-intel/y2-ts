@@ -10,10 +10,9 @@ import { path } from '../internal/utils/path';
  */
 export class Subscriptions extends APIResource {
   /**
-   * Changes the delivery method for a subscription. When setting to `webhook`, a
-   * valid `webhookConfigId` must be provided. The webhook must be active. Set
-   * `emailAudience` to `workspace` to email active workspace members on workspace
-   * plans that support member seats.
+   * Changes a subscription's delivery method. Setting `webhook` requires an active
+   * `webhookConfigId`. On plans with member seats, set `emailAudience` to
+   * `workspace` to email active workspace members.
    */
   updateDelivery(
     subscriptionID: string,

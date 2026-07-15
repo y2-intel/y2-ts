@@ -6,12 +6,12 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Subscription profile operations
+ * Profile subscriptions, ownership, and configuration
  */
 export class Profiles extends APIResource {
   /**
-   * Creates a new intelligence profile with the specified configuration. The profile
-   * will be owned by the authenticated user and start with `active` status.
+   * Creates an `active` intelligence profile owned by the authenticated user with
+   * the supplied configuration.
    *
    * @example
    * ```ts
@@ -29,8 +29,7 @@ export class Profiles extends APIResource {
   }
 
   /**
-   * Replaces all mutable fields of an existing intelligence profile. Only profiles
-   * owned by the authenticated user can be updated.
+   * Replaces every mutable field on a profile owned by the authenticated user.
    *
    * @example
    * ```ts
@@ -48,8 +47,8 @@ export class Profiles extends APIResource {
   }
 
   /**
-   * Returns a list of intelligence profiles the user is subscribed to, including
-   * subscription status and delivery preferences.
+   * Lists the user's subscribed profiles with subscription status and delivery
+   * preferences.
    *
    * @example
    * ```ts
@@ -61,9 +60,8 @@ export class Profiles extends APIResource {
   }
 
   /**
-   * Permanently deletes an intelligence profile and all associated subscriptions.
-   * Only profiles owned by the authenticated user can be deleted. This action cannot
-   * be undone.
+   * Permanently deletes a profile owned by the authenticated user and all its
+   * subscriptions. This action cannot be undone.
    *
    * @example
    * ```ts
@@ -77,9 +75,8 @@ export class Profiles extends APIResource {
   }
 
   /**
-   * Partially updates an existing intelligence profile. Only the fields included in
-   * the request body will be modified; all other fields remain unchanged. Only
-   * profiles owned by the authenticated user can be updated.
+   * Updates supplied mutable fields on a profile owned by the authenticated user.
+   * Omitted fields remain unchanged.
    *
    * @example
    * ```ts
@@ -106,7 +103,7 @@ export interface ProfileCreateResponse {
 export namespace ProfileCreateResponse {
   export interface Data {
     /**
-     * The ID of the newly created profile
+     * Created profile ID
      */
     profileId: string;
   }

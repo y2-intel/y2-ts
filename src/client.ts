@@ -802,19 +802,19 @@ export class Y2 {
   static toFile = Uploads.toFile;
 
   /**
-   * Intelligence report operations
+   * Report retrieval, text, audio, signals, and ontology graphs
    */
   reports: API.Reports = new API.Reports(this);
   /**
-   * Subscription profile operations
+   * Profile subscriptions, ownership, and configuration
    */
   profiles: API.Profiles = new API.Profiles(this);
   /**
-   * Y2 News Terminal operations
+   * News Terminal items, feeds, and AI recaps
    */
   news: API.News = new API.News(this);
   /**
-   * Webhook configuration management for paid workspaces
+   * Webhook configuration for paid workspaces
    */
   webhooks: API.Webhooks = new API.Webhooks(this);
   /**
@@ -822,7 +822,7 @@ export class Y2 {
    */
   subscriptions: API.Subscriptions = new API.Subscriptions(this);
   /**
-   * Situation Room OSINT intelligence operations
+   * Situation Room events, feeds, country data, and source health
    */
   osint: API.Osint = new API.Osint(this);
 }

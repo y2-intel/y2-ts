@@ -6,16 +6,15 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * Y2 News Terminal operations
+ * News Terminal items, feeds, and AI recaps
  */
 export class News extends APIResource {
   /**
-   * Returns news items from the Y2 News Terminal cache. Supports filtering by topics
-   * and pagination.
+   * Lists cached Y2 News Terminal items with topic filters and pagination.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   list(
@@ -26,12 +25,11 @@ export class News extends APIResource {
   }
 
   /**
-   * Returns AI-generated recap summaries for specified topics within a given
-   * timeframe.
+   * Lists AI-generated recaps for selected topics and timeframe.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getRecaps(
@@ -42,11 +40,11 @@ export class News extends APIResource {
   }
 
   /**
-   * Returns all available news feed topics with descriptions.
+   * Lists news feed topics and descriptions.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   listFeeds(options?: RequestOptions): APIPromise<NewsListFeedsResponse> {

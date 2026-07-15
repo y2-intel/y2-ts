@@ -6,16 +6,16 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * Situation Room OSINT intelligence operations
+ * Situation Room events, feeds, country data, and source health
  */
 export class Countries extends APIResource {
   /**
-   * Returns the per-country Conflict Indicators Index (CII) score, including
-   * baseline, delta, and component breakdown.
+   * Returns a country's Conflict Indicators Index (CII) score, baseline, delta, and
+   * components.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getCountryInstabilityIndex(
@@ -26,12 +26,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns recent news items specific to a given country, sourced from the OSINT
-   * event pipeline.
+   * Returns recent country news from the OSINT event pipeline.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getCountryNews(
@@ -43,12 +42,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns an AI-generated intelligence brief for a specific country. Briefs are
-   * generated periodically and cached.
+   * Returns a periodically generated, cached intelligence brief for a country.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getIntelligenceBrief(
@@ -59,12 +57,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns prediction market data for a specific country, including probabilities
-   * and trading volumes.
+   * Returns prediction-market probabilities and trading volumes for a country.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getPredictionMarkets(
@@ -76,12 +73,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns the primary stock market index data for a specific country, including
-   * weekly change and currency.
+   * Returns a country's primary stock index, weekly change, and currency.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getStockMarketIndex(
