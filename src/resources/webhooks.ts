@@ -6,12 +6,12 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Webhook configuration management for paid workspaces
+ * Webhook configuration for paid workspaces
  */
 export class Webhooks extends APIResource {
   /**
-   * Creates a new webhook configuration. Requires a paid workspace plan with webhook
-   * access. The webhook URL must be HTTPS and pass SSRF security validation.
+   * Creates a webhook configuration. Requires a paid workspace plan with webhook
+   * access. The URL must use HTTPS and pass SSRF validation.
    *
    * @example
    * ```ts
@@ -26,8 +26,8 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Updates an existing webhook configuration. All fields are optional. Only
-   * provided fields will be updated.
+   * Updates supplied fields on a webhook configuration. Omitted fields remain
+   * unchanged.
    *
    * @example
    * ```ts
@@ -43,8 +43,7 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Returns all webhook configurations for the authenticated user. Secrets are
-   * masked in the response.
+   * Lists the authenticated user's webhook configurations. Masks secrets.
    *
    * @example
    * ```ts
@@ -56,8 +55,7 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Deletes a webhook configuration. Fails with 409 if the webhook is currently in
-   * use by any subscriptions.
+   * Deletes a webhook configuration. Returns `409` if any subscription uses it.
    *
    * @example
    * ```ts
@@ -69,8 +67,8 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Sends a test payload to the webhook URL and returns the result. Returns 422 if
-   * the webhook endpoint responds with an error.
+   * Sends a test payload to the webhook URL. Returns `422` if the endpoint responds
+   * with an error.
    *
    * @example
    * ```ts
@@ -91,7 +89,7 @@ export interface WebhookCreateResponse {
 export namespace WebhookCreateResponse {
   export interface Data {
     /**
-     * The ID of the newly created webhook configuration
+     * Created webhook configuration ID
      */
     webhookId: string;
   }
@@ -143,7 +141,7 @@ export namespace WebhookListResponse {
     failureCount: number;
 
     /**
-     * Whether a secret is configured (actual secret is never exposed)
+     * True when configured; never exposes the secret
      */
     hasSecret: boolean;
 

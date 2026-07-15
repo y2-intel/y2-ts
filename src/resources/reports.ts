@@ -7,16 +7,15 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Intelligence report operations
+ * Report retrieval, text, audio, signals, and ontology graphs
  */
 export class Reports extends APIResource {
   /**
-   * Returns the full content of a specific intelligence report, including HTML
-   * content, sources, and audio metadata.
+   * Returns a report's full HTML content, sources, and audio metadata.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   retrieve(reportID: string, options?: RequestOptions): APIPromise<ReportRetrieveResponse> {
@@ -24,12 +23,12 @@ export class Reports extends APIResource {
   }
 
   /**
-   * Returns a list of reports for the user's subscribed profiles. Results are sorted
-   * by generation date (newest first).
+   * Lists reports for the user's subscribed profiles by generation date, newest
+   * first.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   list(
@@ -43,9 +42,9 @@ export class Reports extends APIResource {
    * Returns audio file metadata or redirects to the CDN URL. Requires the
    * `reports:audio` scope.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   retrieveAudio(
@@ -526,7 +525,7 @@ export interface ReportListParams {
 
 export interface ReportRetrieveAudioParams {
   /**
-   * If true, returns 302 redirect to audio CDN URL
+   * When true, redirects with `302` to the audio CDN URL
    */
   redirect?: boolean;
 }

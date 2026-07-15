@@ -18,20 +18,19 @@ import { APIPromise } from '../../core/api-promise';
 import { RequestOptions } from '../../internal/request-options';
 
 /**
- * Situation Room OSINT intelligence operations
+ * Situation Room events, feeds, country data, and source health
  */
 export class Osint extends APIResource {
   countries: CountriesAPI.Countries = new CountriesAPI.Countries(this._client);
   sources: SourcesAPI.Sources = new SourcesAPI.Sources(this._client);
 
   /**
-   * Returns the Conflict Indicators Index (CII) values. Each item represents a
-   * conflict indicator with a score from 0-100 and a delta showing recent change.
-   * Supports filtering by region and category.
+   * Lists Conflict Indicators Index (CII) values with 0–100 scores and recent-change
+   * deltas. Supports region and category filters.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getConflictIndicators(
@@ -42,11 +41,10 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns GPS interference zones detected via ADS-B navigation accuracy
-   * degradation analysis, aggregated into H3 hex cells.
+   * Lists GPS interference zones inferred from ADS-B navigation-accuracy degradation
+   * and aggregated into H3 cells.
    *
-   * Coverage spans 22 theaters with tiered refresh cadence calibrated to fit the
-   * shared Wingbits quota:
+   * Coverage spans 22 theaters on a tiered cadence within the shared Wingbits quota:
    *
    * | Tier      | Cadence   | Theaters                                                                                        |
    * | --------- | --------- | ----------------------------------------------------------------------------------------------- |
@@ -55,12 +53,11 @@ export class Osint extends APIResource {
    * | Perimeter | Every 6h  | us-pacom-west, us-northeast, aleutian-bering, baltic-south, giuk-greenland                      |
    * | Daily     | Every 24h | baltic-north, us-north, arctic-greenland-pass                                                   |
    *
-   * Records expire 30 minutes after fetch; clients polling for fresh interference
-   * zones should align polling cadence to the tier of interest.
+   * Records expire 30 minutes after fetch. Align polling with the theater's tier.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getGpsJammingZones(
@@ -71,19 +68,17 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns military posture assessments for monitored theaters, based on detected
-   * military aircraft activity from the Wingbits ADS-B network. Each theater has a
-   * posture level (normal, elevated, critical) and aircraft breakdown by type.
+   * Lists theater posture assessments based on Wingbits ADS-B military aircraft
+   * activity. Each includes a `normal`, `elevated`, or `critical` posture and
+   * aircraft counts by type.
    *
-   * > **Status (May 2026):** Posture is computed from the aircraft tracking
-   * > pipeline, which is temporarily feature-flagged off to conserve the shared
-   * > Wingbits quota. This endpoint remains available but may return empty or stale
-   * > results until aircraft ingestion is re-enabled. GPS jamming
-   * > (`/osint/gps-jamming`) is unaffected.
+   * > **Status:** Aircraft ingestion has been disabled since May 8, 2026, to reserve
+   * > the shared Wingbits quota for GPS interference detection. This endpoint may
+   * > return empty or stale results. `/osint/gps-jamming` is unaffected.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getMilitaryPosture(
@@ -94,17 +89,16 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns tracked military aircraft positions from the Wingbits ADS-B network,
-   * filtered and classified by type (tanker, AWACS, fighter, etc.).
+   * Lists Wingbits ADS-B military aircraft positions, classified by type such as
+   * tanker, AWACS, or fighter.
    *
-   * > **Status (May 2026):** Aircraft ingestion is temporarily feature-flagged off
-   * > to dedicate the shared Wingbits quota to GPS interference detection. This
-   * > endpoint remains available but may return empty or stale results until
-   * > ingestion is re-enabled. GPS jamming (`/osint/gps-jamming`) is unaffected.
+   * > **Status:** Aircraft ingestion has been disabled since May 8, 2026, to reserve
+   * > the shared Wingbits quota for GPS interference detection. This endpoint may
+   * > return empty or stale results. `/osint/gps-jamming` is unaffected.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   listAircraft(
@@ -115,12 +109,11 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns OSINT threat events from the Situation Room. Supports filtering by
-   * category, severity, region, and country.
+   * Lists Situation Room threat events. Supports category and severity filters.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   listEvents(
@@ -131,12 +124,11 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns naval vessel positions sourced from USNI fleet tracker data, including
-   * carrier strike groups and individual warships.
+   * Lists USNI fleet-tracker positions for carrier strike groups and warships.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   listVessels(
@@ -147,12 +139,12 @@ export class Osint extends APIResource {
   }
 
   /**
-   * Returns OSINT events with geographic coordinates for map display. Events without
-   * coordinates are excluded.
+   * Lists geolocated OSINT events for map display. Excludes events without
+   * coordinates.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   mapEvents(
