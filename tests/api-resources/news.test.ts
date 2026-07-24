@@ -25,7 +25,12 @@ describe('resource news', () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
       client.news.list(
-        { limit: 1, topics: 'crypto,ai_agents,bitcoin' },
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+          topics: 'crypto,ai_agents,bitcoin',
+        },
         { path: '/_stainless_unknown_path' },
       ),
     ).rejects.toThrow(Y2.NotFoundError);

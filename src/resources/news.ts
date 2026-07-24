@@ -79,10 +79,33 @@ export type TopicEnum =
   | 'solana'
   | 'tech'
   | 'token_listings'
-  | 'virtuals';
+  | 'virtuals'
+  | 'geopolitics'
+  | 'politics_us'
+  | 'defense'
+  | 'sanctions_trade'
+  | 'equities'
+  | 'rates_fx'
+  | 'commodities'
+  | 'banking_reg'
+  | 'energy'
+  | 'cyber'
+  | 'semiconductors'
+  | 'biotech'
+  | 'logistics'
+  | 'critical_minerals'
+  | 'telecom'
+  | 'region_mena'
+  | 'region_europe'
+  | 'region_asiapac'
+  | 'region_latam'
+  | 'region_africa'
+  | 'region_namerica';
 
 export interface NewsListResponse {
   data: Array<NewsListResponse.Data>;
+
+  links: NewsListResponse.Links;
 
   meta: NewsListResponse.Meta;
 }
@@ -91,57 +114,97 @@ export namespace NewsListResponse {
   export interface Data {
     id: string;
 
-    /**
-     * Primary signal/headline
-     */
-    signal: string;
+    author: string | null;
 
-    /**
-     * Unix timestamp (seconds)
-     */
-    timestamp: number;
+    content: string;
 
-    timestampISO: string;
+    links: Data.Links;
 
-    author?: string;
+    publishedAt: string;
 
-    categories?: Array<string>;
+    sentiment: Data.Sentiment;
 
-    /**
-     * Full context
-     */
-    content?: string;
+    sources: Array<Data.Source>;
 
-    narrativeId?: string;
+    summary: string;
 
-    /**
-     * Sentiment classification for news items
-     */
-    sentiment?: 'bullish' | 'bearish' | 'neutral' | null;
+    title: string;
 
-    sentimentValue?: number;
+    topics: Array<string>;
 
-    sources?: Array<string>;
+    type: 'news';
+  }
 
-    /**
-     * Short context summary
-     */
-    summary?: string;
+  export namespace Data {
+    export interface Links {
+      canonical: string | null;
+    }
 
-    /**
-     * Related tokens/assets
-     */
-    tokens?: Array<string>;
+    export interface Sentiment {
+      /**
+       * Sentiment classification for news items
+       */
+      label: 'bullish' | 'bearish' | 'neutral' | null;
 
-    tweetUrl?: string;
+      value: number;
+    }
+
+    export interface Source {
+      id: string;
+
+      language: string | null;
+
+      publishedAt: string;
+
+      publisher: string | null;
+
+      retrievedAt: string | null;
+
+      sourceType: string;
+
+      title: string | null;
+
+      url: string | null;
+    }
+  }
+
+  export interface Links {
+    next: string | null;
+
+    self: string;
   }
 
   export interface Meta {
-    count?: number;
+    asOf: string;
 
-    limit?: number;
+    /**
+     * @deprecated
+     */
+    count: number;
 
-    topics?: Array<NewsAPI.TopicEnum>;
+    hasMore: boolean;
+
+    isDone: boolean;
+
+    limit: number;
+
+    nextCursor: string | null;
+
+    page: Meta.Page;
+
+    pageCount: number;
+
+    topics: Array<NewsAPI.TopicEnum>;
+  }
+
+  export namespace Meta {
+    export interface Page {
+      hasMore: boolean;
+
+      limit: number;
+
+      nextCursor: string | null;
+    }
   }
 }
 
@@ -176,32 +239,69 @@ export namespace NewsListFeedsResponse {
     id: NewsAPI.TopicEnum;
 
     /**
+     * UI gradient classes associated with the feed
+     */
+    color: string;
+
+    /**
+     * Feed description
+     */
+    description: string;
+
+    /**
+     * Machine-readable topic group ID
+     */
+    group: string;
+
+    /**
+     * Human-readable topic group name
+     */
+    groupLabel: string;
+
+    /**
+     * Whether eligible signals can enter the OSINT ontology pipeline
+     */
+    ingestOntology: boolean;
+
+    /**
      * Human-readable name
      */
     name: string;
 
     /**
-     * Feed description
+     * Compact display name
      */
-    description?: string;
+    shortLabel: string;
   }
 
   export interface Meta {
     count?: number;
+
+    defaultTopics?: Array<NewsAPI.TopicEnum>;
   }
 }
 
 export interface NewsListParams {
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Use `ndjson` for row-oriented streaming output.
+   */
+  format?: 'json' | 'ndjson';
+
   /**
    * Maximum number of items to return
    */
   limit?: number;
 
   /**
-   * Comma-separated list of topics to filter by. Valid topics: ai, ai_agents, base,
-   * bitcoin, crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
-   * on_chain_whale, perps, ripple, rwa, solana, tech, token_listings, virtuals.
-   * Default: crypto, ai_agents, macro, bitcoin, ethereum, tech
+   * Comma-separated list of topics to filter by. Use `GET /news/feeds` to discover
+   * the current topic catalog. Default: crypto, geopolitics, macro, equities, ai,
+   * energy
    */
   topics?: string;
 }
@@ -213,9 +313,8 @@ export interface NewsGetRecapsParams {
   timeframe?: TimeframeEnum;
 
   /**
-   * Comma-separated list of topics. Valid topics: ai, ai_agents, base, bitcoin,
-   * crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
-   * on_chain_whale, perps, ripple, rwa, solana, tech, token_listings, virtuals
+   * Comma-separated list of topics. Use `GET /news/feeds` to discover the current
+   * topic catalog.
    */
   topics?: string;
 }

@@ -32,10 +32,10 @@ export {
   type ProfileCreateResponse,
   type ProfileUpdateResponse,
   type ProfileListResponse,
-  type ProfileDeleteResponse,
   type ProfilePartialUpdateResponse,
   type ProfileCreateParams,
   type ProfileUpdateParams,
+  type ProfileDeleteParams,
   type ProfilePartialUpdateParams,
 } from './profiles';
 export {
@@ -44,6 +44,7 @@ export {
   type ReportRetrieveResponse,
   type ReportListResponse,
   type ReportRetrieveAudioResponse,
+  type ReportRetrieveParams,
   type ReportListParams,
   type ReportRetrieveAudioParams,
 } from './reports';
@@ -57,8 +58,8 @@ export {
   type WebhookCreateResponse,
   type WebhookUpdateResponse,
   type WebhookListResponse,
-  type WebhookDeleteResponse,
   type WebhookTestResponse,
   type WebhookCreateParams,
   type WebhookUpdateParams,
+  type WebhookDeleteParams,
 } from './webhooks';

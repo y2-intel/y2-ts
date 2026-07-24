@@ -1,4 +1,4 @@
 configured_endpoints: 30
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/jedi-labs/y2-45a08136d5160db99612bb7b1421869f591901f257a62f0a094cba8c21d30e5d.yml
-openapi_spec_hash: 3012a5ab8f003b1047671263d844fda6
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/jedi-labs/y2-43323137b55967c5e9d95b3517805963d5c4f43af06b077180be727dcb8d8cfc.yml
+openapi_spec_hash: 7c85ead179dbb8f587c9ee2f14dca814
 config_hash: 595cf4a10ca95af2ce710a4bf5a004de

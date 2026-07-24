@@ -36,7 +36,15 @@ describe('resource countries', () => {
   test.skip('getCountryNews: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.countries.getCountryNews('US', { limit: 1 }, { path: '/_stainless_unknown_path' }),
+      client.osint.countries.getCountryNews(
+        'US',
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 
@@ -68,7 +76,15 @@ describe('resource countries', () => {
   test.skip('getPredictionMarkets: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.countries.getPredictionMarkets('US', { limit: 1 }, { path: '/_stainless_unknown_path' }),
+      client.osint.countries.getPredictionMarkets(
+        'US',
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 

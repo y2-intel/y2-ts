@@ -11,15 +11,20 @@ import { path } from '../internal/utils/path';
  */
 export class Reports extends APIResource {
   /**
-   * Returns a report's full HTML content, sources, and audio metadata.
+   * Returns a compact report by default. Use bounded `include` values or
+   * `view=agent`; request `text/markdown` for the canonical Markdown representation.
    *
    * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
    * authentication. Without a Bearer API key, start the x402 flow from the
    * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
-  retrieve(reportID: string, options?: RequestOptions): APIPromise<ReportRetrieveResponse> {
-    return this._client.get(path`/reports/${reportID}`, options);
+  retrieve(
+    reportID: string,
+    query: ReportRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ReportRetrieveResponse> {
+    return this._client.get(path`/reports/${reportID}`, { query, ...options });
   }
 
   /**
@@ -58,7 +63,7 @@ export class Reports extends APIResource {
 
 export interface AudioMetadata {
   /**
-   * Duration in seconds
+   * @deprecated Duration in seconds
    */
   duration?: number;
 
@@ -68,18 +73,18 @@ export interface AudioMetadata {
   durationFormatted?: string;
 
   /**
-   * File size in bytes
+   * Canonical duration in seconds.
    */
-  fileSize?: number;
+  durationSeconds?: number | null;
+
+  /**
+   * File size in bytes.
+   */
+  fileSizeBytes?: number | null;
 
   format?: 'mp3';
 
   mimeType?: 'audio/mpeg';
-
-  /**
-   * Convex storage ID for internal reference
-   */
-  storageId?: string;
 
   /**
    * CDN URL for audio file
@@ -95,335 +100,234 @@ export namespace ReportRetrieveResponse {
   export interface Data {
     id: string;
 
-    content: Data.Content;
+    audio: Data.Audio;
 
-    generatedAt: number;
+    generatedAt: string;
 
-    generatedAtISO: string;
+    intelligence: Data.Intelligence;
+
+    language: string;
+
+    links: { [key: string]: string | null };
 
     profileId: string;
 
-    audio?: ReportsAPI.AudioMetadata | null;
+    publishedAt: string;
 
-    intelligence?: Data.Intelligence;
+    status: 'published';
 
-    metadata?: Data.Metadata;
+    summary: string | null;
 
-    profileName?: string;
+    topic: string | null;
 
-    profileTopic?: string;
+    type: 'report';
 
-    sources?: Array<string>;
+    audioRepresentation?: ReportsAPI.AudioMetadata | null;
 
-    topic?: string;
+    content?: Data.Content;
+
+    graph?: Data.Graph;
+
+    profile?: Data.Profile;
+
+    signals?: Array<Data.Signal>;
+
+    sources?: Array<Data.Source>;
   }
 
   export namespace Data {
-    export interface Content {
-      /**
-       * Full HTML content
-       */
-      html?: string;
+    export interface Audio {
+      durationSeconds: number | null;
 
-      /**
-       * SMS-friendly summary
-       */
-      summary?: string;
+      mediaType: string | null;
+
+      status: 'available' | 'unavailable';
     }
 
     export interface Intelligence {
-      ontologyGraph?: Intelligence.OntologyGraph | null;
+      graph: Intelligence.Graph | null;
 
-      sigint?: Intelligence.Sigint | null;
+      signalCount: number;
     }
 
     export namespace Intelligence {
-      export interface OntologyGraph {
-        citations: Array<string>;
+      export interface Graph {
+        edgeCount: number;
 
-        edges: Array<OntologyGraph.Edge>;
+        incidentCount: number;
 
-        /**
-         * Graph extraction timestamp in milliseconds
-         */
-        generatedAt: number;
-
-        incidents: Array<OntologyGraph.Incident>;
-
-        nodes: Array<OntologyGraph.Node>;
-
-        source: 'y2_report_graph';
-
-        summary: string;
-
-        model?: string;
-
-        promptVersion?: string;
-
-        topic?: string;
-      }
-
-      export namespace OntologyGraph {
-        export interface Edge {
-          /**
-           * Report-local graph edge ID
-           */
-          id: string;
-
-          confidence: number;
-
-          /**
-           * Source report-local node ID
-           */
-          from: string;
-
-          fromLabel: string;
-
-          kind: string;
-
-          /**
-           * Target report-local node ID
-           */
-          to: string;
-
-          toLabel: string;
-
-          evidenceUrl?: string;
-        }
-
-        export interface Incident {
-          /**
-           * Report-local incident anchor ID
-           */
-          id: string;
-
-          category: string;
-
-          citedUrls: Array<string>;
-
-          eventTime: number;
-
-          involvedNodeIds: Array<string>;
-
-          severity: string;
-
-          title: string;
-
-          /**
-           * Linked ontology incident ID, when resolved
-           */
-          incidentId?: string;
-        }
-
-        export interface Node {
-          /**
-           * Report-local graph node ID
-           */
-          id: string;
-
-          evidenceUrls: Array<string>;
-
-          kind: string;
-
-          label: string;
-
-          /**
-           * Linked ontology entity ID, when resolved
-           */
-          entityId?: string;
-
-          summary?: string;
-        }
-      }
-
-      export interface Sigint {
-        signals: Array<Sigint.Signal>;
-
-        /**
-         * Signal extraction timestamp in milliseconds
-         */
-        generatedAt?: number;
-
-        /**
-         * One-sentence summary of the dominant emergent signal set
-         */
-        summary?: string;
-      }
-
-      export namespace Sigint {
-        export interface Signal {
-          actionType:
-            | 'invest'
-            | 'patch'
-            | 'upgrade'
-            | 'strategy'
-            | 'hedge'
-            | 'monitor'
-            | 'mitigate'
-            | 'escalate'
-            | 'defer'
-            | 'allocate';
-
-          confidence: number;
-
-          /**
-           * Candidate action or decision hypothesis
-           */
-          decision: string;
-
-          domain:
-            | 'cyber'
-            | 'markets'
-            | 'geopolitical'
-            | 'operational'
-            | 'supply_chain'
-            | 'policy'
-            | 'military'
-            | 'technology'
-            | 'other';
-
-          entityNames: Array<string>;
-
-          evidenceUrls: Array<string>;
-
-          inferenceType: 'observed' | 'inferred' | 'speculative';
-
-          /**
-           * Evidence-grounded rationale
-           */
-          justification: string;
-
-          priority: 'low' | 'medium' | 'high' | 'critical';
-
-          /**
-           * Concise statement of the inferred signal
-           */
-          signal: string;
-
-          timeHorizon: 'immediate' | 'near_term' | 'mid_term' | 'long_term';
-
-          /**
-           * Short signal title
-           */
-          title: string;
-
-          /**
-           * Ontology-aligned signal subjects
-           */
-          subjects?: Array<Signal.Subject>;
-
-          /**
-           * Lowercase filtering tokens for domains, actions, priorities, and subjects
-           */
-          tags?: Array<string>;
-        }
-
-        export namespace Signal {
-          export interface Subject {
-            kind:
-              | 'person'
-              | 'organization'
-              | 'country'
-              | 'region'
-              | 'vessel'
-              | 'aircraft'
-              | 'facility'
-              | 'asset'
-              | 'indicator'
-              | 'cve'
-              | 'malware_family'
-              | 'threat_actor'
-              | 'vendor'
-              | 'software'
-              | 'ai_model'
-              | 'api_service'
-              | 'protocol';
-
-            /**
-             * Human-readable subject label
-             */
-            label: string;
-
-            /**
-             * Stable ontology subject key used for filtering
-             */
-            normalizedKey: string;
-
-            /**
-             * Linked ontology entity ID when resolved
-             */
-            entityId?: string;
-          }
-        }
+        nodeCount: number;
       }
     }
 
-    export interface Metadata {
-      /**
-       * Source freshness validation results
-       */
-      freshnessMetadata?: Metadata.FreshnessMetadata;
+    export interface Content {
+      markdown: string;
 
-      model?: string;
-
-      /**
-       * Metadata about recursive research execution
-       */
-      recursionMetadata?: Metadata.RecursionMetadata;
-
-      totalCost?: number;
+      mediaType: 'text/markdown';
     }
 
-    export namespace Metadata {
-      /**
-       * Source freshness validation results
-       */
-      export interface FreshnessMetadata {
-        accessibleLinks?: number;
+    export interface Graph {
+      edges: Array<Graph.Edge>;
 
-        /**
-         * Average source age in milliseconds
-         */
-        averageAgeMs?: number;
+      generatedAt: string;
 
-        /**
-         * Overall freshness score (higher = fresher)
-         */
-        freshnessScore?: number;
+      incidents: Array<Graph.Incident>;
 
-        staleSourcesCount?: number;
+      nodes: Array<Graph.Node>;
 
-        totalLinks?: number;
+      sources: Array<Graph.Source>;
 
-        validatedAt?: number;
+      summary: string;
+    }
+
+    export namespace Graph {
+      export interface Edge {
+        id: string;
+
+        confidence: number;
+
+        from: string;
+
+        source: Edge.Source | null;
+
+        to: string;
+
+        type: string;
       }
 
-      /**
-       * Metadata about recursive research execution
-       */
-      export interface RecursionMetadata {
-        /**
-         * Recursion depth achieved (0 = standard report)
-         */
-        depth?: number;
+      export namespace Edge {
+        export interface Source {
+          id: string;
 
-        /**
-         * Reason if fallback to standard generation occurred
-         */
-        fallbackReason?: string;
-
-        layersProcessed?: number;
-
-        strategy?: 'breadth-first' | 'depth-first' | 'hybrid';
-
-        subtopicsGenerated?: Array<string>;
-
-        totalSourcesCollected?: number;
-
-        totalTimeMs?: number;
-
-        uniqueSourcesAggregated?: number;
+          url: string;
+        }
       }
+
+      export interface Incident {
+        id: string;
+
+        category: string;
+
+        entityIds: Array<string>;
+
+        occurredAt: string;
+
+        severity: string;
+
+        sources: Array<Incident.Source>;
+
+        title: string;
+
+        type: 'incident';
+      }
+
+      export namespace Incident {
+        export interface Source {
+          id: string;
+
+          url: string;
+        }
+      }
+
+      export interface Node {
+        id: string;
+
+        kind: string;
+
+        label: string;
+
+        sources: Array<Node.Source>;
+
+        summary: string | null;
+
+        type: 'entity';
+      }
+
+      export namespace Node {
+        export interface Source {
+          id: string;
+
+          url: string;
+        }
+      }
+
+      export interface Source {
+        id: string;
+
+        url: string;
+      }
+    }
+
+    export interface Profile {
+      id: string;
+
+      name: string | null;
+
+      topic: string | null;
+    }
+
+    export interface Signal {
+      actionType: string;
+
+      confidence: number;
+
+      decision: string;
+
+      domain: string;
+
+      inferenceType: string;
+
+      justification: string;
+
+      priority: string;
+
+      signal: string;
+
+      sources: Array<Signal.Source>;
+
+      subjects: Array<Signal.Subject>;
+
+      tags: Array<string>;
+
+      timeHorizon: string;
+
+      title: string;
+    }
+
+    export namespace Signal {
+      export interface Source {
+        id: string;
+
+        url: string;
+      }
+
+      export interface Subject {
+        entityId: string | null;
+
+        key: string;
+
+        kind: string;
+
+        label: string;
+      }
+    }
+
+    export interface Source {
+      id: string;
+
+      language: string | null;
+
+      publishedAt: string | null;
+
+      publisher: string | null;
+
+      retrievedAt: string;
+
+      sourceType: string;
+
+      title: string | null;
+
+      url: string;
     }
   }
 }
@@ -431,79 +335,99 @@ export namespace ReportRetrieveResponse {
 export interface ReportListResponse {
   data: Array<ReportListResponse.Data>;
 
+  links: ReportListResponse.Links;
+
   meta: ReportListResponse.Meta;
 }
 
 export namespace ReportListResponse {
   export interface Data {
-    /**
-     * Report ID (Convex document ID)
-     */
     id: string;
 
-    /**
-     * Unix timestamp (milliseconds)
-     */
-    generatedAt: number;
+    audio: Data.Audio;
 
-    /**
-     * ISO 8601 timestamp
-     */
-    generatedAtISO: string;
+    generatedAt: string;
 
-    /**
-     * Profile ID this report belongs to
-     */
+    intelligence: Data.Intelligence;
+
+    language: string;
+
+    links: { [key: string]: string | null };
+
     profileId: string;
 
-    /**
-     * Whether audio narration is available
-     */
-    hasAudio?: boolean;
+    publishedAt: string;
 
-    intelligence?: Data.Intelligence;
+    status: 'published';
 
-    /**
-     * LLM model used for generation
-     */
-    model?: string;
+    summary: string | null;
 
-    /**
-     * Brief SMS-friendly summary
-     */
-    summary?: string;
+    topic: string | null;
 
-    /**
-     * Report topic
-     */
-    topic?: string;
+    type: 'report';
   }
 
   export namespace Data {
-    export interface Intelligence {
-      ontologyGraph?: Intelligence.OntologyGraph | null;
+    export interface Audio {
+      durationSeconds: number | null;
 
-      /**
-       * Number of emergent SIGINT signals attached to the report
-       */
-      sigintSignalCount?: number;
+      mediaType: string | null;
+
+      status: 'available' | 'unavailable';
+    }
+
+    export interface Intelligence {
+      graph: Intelligence.Graph | null;
+
+      signalCount: number;
     }
 
     export namespace Intelligence {
-      export interface OntologyGraph {
-        edgeCount?: number;
+      export interface Graph {
+        edgeCount: number;
 
-        incidentCount?: number;
+        incidentCount: number;
 
-        nodeCount?: number;
+        nodeCount: number;
       }
     }
   }
 
-  export interface Meta {
-    count?: number;
+  export interface Links {
+    next: string | null;
 
-    limit?: number;
+    self: string;
+  }
+
+  export interface Meta {
+    asOf: string;
+
+    /**
+     * @deprecated
+     */
+    count: number;
+
+    hasMore: boolean;
+
+    isDone: boolean;
+
+    limit: number;
+
+    nextCursor: string | null;
+
+    page: Meta.Page;
+
+    pageCount: number;
+  }
+
+  export namespace Meta {
+    export interface Page {
+      hasMore: boolean;
+
+      limit: number;
+
+      nextCursor: string | null;
+    }
   }
 }
 
@@ -511,14 +435,42 @@ export interface ReportRetrieveAudioResponse {
   data: AudioMetadata | null;
 }
 
+export interface ReportRetrieveParams {
+  /**
+   * Explicit representation override.
+   */
+  format?: 'markdown';
+
+  /**
+   * Comma-separated `content,sources,signals,graph,audio` expansions.
+   */
+  include?: string;
+
+  /**
+   * Compact projection optimized for grounded agent context.
+   */
+  view?: 'agent';
+}
+
 export interface ReportListParams {
   /**
-   * Maximum number of reports to return (hard-capped at 5)
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * `json` uses the resource envelope; `ndjson` streams one canonical row per line.
+   */
+  format?: 'json' | 'ndjson';
+
+  /**
+   * Maximum number of report rows to scan for this page.
    */
   limit?: number;
 
   /**
-   * Filter reports by profile ID
+   * Filter by stable public profile ID (`prf_...`).
    */
   profileId?: string;
 }
@@ -536,6 +488,7 @@ export declare namespace Reports {
     type ReportRetrieveResponse as ReportRetrieveResponse,
     type ReportListResponse as ReportListResponse,
     type ReportRetrieveAudioResponse as ReportRetrieveAudioResponse,
+    type ReportRetrieveParams as ReportRetrieveParams,
     type ReportListParams as ReportListParams,
     type ReportRetrieveAudioParams as ReportRetrieveAudioParams,
   };
