@@ -10,7 +10,7 @@ const client = new Y2({
 describe('resource reports', () => {
   // Mock server tests are disabled
   test.skip('retrieve', async () => {
-    const responsePromise = client.reports.retrieve('k57abc123def456');
+    const responsePromise = client.reports.retrieve('rpt_0123456789abcdef01234567');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -18,6 +18,22 @@ describe('resource reports', () => {
     const dataAndResponse = await responsePromise.withResponse();
     expect(dataAndResponse.data).toBe(response);
     expect(dataAndResponse.response).toBe(rawResponse);
+  });
+
+  // Mock server tests are disabled
+  test.skip('retrieve: request options and params are passed correctly', async () => {
+    // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
+    await expect(
+      client.reports.retrieve(
+        'rpt_0123456789abcdef01234567',
+        {
+          format: 'markdown',
+          include: 'include',
+          view: 'agent',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
+    ).rejects.toThrow(Y2.NotFoundError);
   });
 
   // Mock server tests are disabled
@@ -36,13 +52,21 @@ describe('resource reports', () => {
   test.skip('list: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.reports.list({ limit: 1, profileId: 'k57abc123def456' }, { path: '/_stainless_unknown_path' }),
+      client.reports.list(
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+          profileId: 'prf_0123456789abcdef01234567',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 
   // Mock server tests are disabled
   test.skip('retrieveAudio', async () => {
-    const responsePromise = client.reports.retrieveAudio('reportId');
+    const responsePromise = client.reports.retrieveAudio('rpt_210b9798eb53baa4e69d31c1');
     const rawResponse = await responsePromise.asResponse();
     expect(rawResponse).toBeInstanceOf(Response);
     const response = await responsePromise;
@@ -56,7 +80,11 @@ describe('resource reports', () => {
   test.skip('retrieveAudio: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.reports.retrieveAudio('reportId', { redirect: true }, { path: '/_stainless_unknown_path' }),
+      client.reports.retrieveAudio(
+        'rpt_210b9798eb53baa4e69d31c1',
+        { redirect: true },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 });

@@ -10,7 +10,7 @@ const client = new Y2({
 describe('resource subscriptions', () => {
   // Mock server tests are disabled
   test.skip('updateDelivery: only required params', async () => {
-    const responsePromise = client.subscriptions.updateDelivery('subscriptionId', {
+    const responsePromise = client.subscriptions.updateDelivery('sub_210b9798eb53baa4e69d31c1', {
       deliveryMethod: 'email',
     });
     const rawResponse = await responsePromise.asResponse();
@@ -24,10 +24,10 @@ describe('resource subscriptions', () => {
 
   // Mock server tests are disabled
   test.skip('updateDelivery: required and optional params', async () => {
-    const response = await client.subscriptions.updateDelivery('subscriptionId', {
+    const response = await client.subscriptions.updateDelivery('sub_210b9798eb53baa4e69d31c1', {
       deliveryMethod: 'email',
       emailAudience: 'individual',
-      webhookConfigId: 'webhookConfigId',
+      webhookConfigId: 'whk_210b9798eb53baa4e69d31c1',
     });
   });
 });

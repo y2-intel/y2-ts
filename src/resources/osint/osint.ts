@@ -911,6 +911,17 @@ export interface OsintGetConflictIndicatorsParams {
     | 'other';
 
   /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * `json` uses the resource envelope; `ndjson` streams one canonical row per line.
+   */
+  format?: 'json' | 'ndjson';
+
+  /**
    * Maximum number of items to return
    */
   limit?: number;
@@ -922,6 +933,18 @@ export interface OsintGetConflictIndicatorsParams {
 }
 
 export interface OsintGetGpsJammingZonesParams {
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
   /**
    * Maximum number of zones to return
    */
@@ -935,12 +958,36 @@ export interface OsintGetGpsJammingZonesParams {
 
 export interface OsintGetMilitaryPostureParams {
   /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
+  /**
    * Maximum number of items to return
    */
   limit?: number;
 }
 
 export interface OsintListAircraftParams {
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
   /**
    * Maximum number of aircraft to return
    */
@@ -970,6 +1017,18 @@ export interface OsintListEventsParams {
     | 'other';
 
   /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
+  /**
    * Maximum number of events to return
    */
   limit?: number;
@@ -982,6 +1041,18 @@ export interface OsintListEventsParams {
 
 export interface OsintListVesselsParams {
   /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
+  /**
    * Maximum number of vessels to return
    */
   limit?: number;
@@ -993,6 +1064,18 @@ export interface OsintListVesselsParams {
 }
 
 export interface OsintMapEventsParams {
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
   /**
    * Maximum number of events to return
    */

@@ -249,10 +249,9 @@ export namespace CountryGetIntelligenceBriefResponse {
      */
     generatedAt: number;
 
-    /**
-     * LLM model used for generation
-     */
-    model: string;
+    generatedAtISO: string;
+
+    publishedAt: string;
   }
 }
 
@@ -275,20 +274,31 @@ export namespace CountryGetPredictionMarketsResponse {
    * `PredictionMarket`.
    */
   export interface Data {
+    id: string;
+
     /**
      * Prediction market identifier
      */
     marketId: string;
 
     /**
+     * Typed outcome labels with normalized fractional probabilities.
+     */
+    outcomes: Array<Data.Outcome>;
+
+    /**
      * Current probability (0-1)
      */
     probability: number;
+
+    probabilityBasis: 'fraction_0_to_1';
 
     /**
      * Market question/title
      */
     title: string;
+
+    type: 'prediction_market';
 
     /**
      * Market resolution date
@@ -300,15 +310,7 @@ export namespace CountryGetPredictionMarketsResponse {
      */
     liquidity?: number | null;
 
-    /**
-     * Outcome prices corresponding to each outcome (null if unavailable)
-     */
-    outcomePrices?: Array<string> | null;
-
-    /**
-     * Possible market outcomes
-     */
-    outcomes?: Array<string>;
+    liquidityMeasurement?: Data.LiquidityMeasurement;
 
     /**
      * Polymarket URL for this market
@@ -324,6 +326,38 @@ export namespace CountryGetPredictionMarketsResponse {
      * Trading volume
      */
     volume?: number;
+
+    volumeMeasurement?: Data.VolumeMeasurement;
+  }
+
+  export namespace Data {
+    export interface Outcome {
+      label: string;
+
+      probability: number;
+    }
+
+    export interface LiquidityMeasurement {
+      basis: 'provider_reported';
+
+      /**
+       * ISO 4217 code when the source identifies one; otherwise null.
+       */
+      currency: string | null;
+
+      value: number | null;
+    }
+
+    export interface VolumeMeasurement {
+      basis: 'provider_reported';
+
+      /**
+       * ISO 4217 code when the source identifies one; otherwise null.
+       */
+      currency: string | null;
+
+      value: number | null;
+    }
   }
 
   export interface Meta {
@@ -385,12 +419,35 @@ export namespace CountryGetStockMarketIndexResponse {
 
 export interface CountryGetCountryNewsParams {
   /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
+  /**
    * Maximum number of news items to return
    */
   limit?: number;
 }
 
 export interface CountryGetPredictionMarketsParams {
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * `json` uses the resource envelope; `ndjson` streams one canonical row per line.
+   */
+  format?: 'json' | 'ndjson';
+
   /**
    * Maximum number of predictions to return
    */

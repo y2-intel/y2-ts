@@ -30,7 +30,7 @@ import {
 import {
   ProfileCreateParams,
   ProfileCreateResponse,
-  ProfileDeleteResponse,
+  ProfileDeleteParams,
   ProfileListResponse,
   ProfilePartialUpdateParams,
   ProfilePartialUpdateResponse,
@@ -44,6 +44,7 @@ import {
   ReportListResponse,
   ReportRetrieveAudioParams,
   ReportRetrieveAudioResponse,
+  ReportRetrieveParams,
   ReportRetrieveResponse,
   Reports,
 } from './resources/reports';
@@ -55,7 +56,7 @@ import {
 import {
   WebhookCreateParams,
   WebhookCreateResponse,
-  WebhookDeleteResponse,
+  WebhookDeleteParams,
   WebhookListResponse,
   WebhookTestResponse,
   WebhookUpdateParams,
@@ -843,6 +844,7 @@ export declare namespace Y2 {
     type ReportRetrieveResponse as ReportRetrieveResponse,
     type ReportListResponse as ReportListResponse,
     type ReportRetrieveAudioResponse as ReportRetrieveAudioResponse,
+    type ReportRetrieveParams as ReportRetrieveParams,
     type ReportListParams as ReportListParams,
     type ReportRetrieveAudioParams as ReportRetrieveAudioParams,
   };
@@ -852,10 +854,10 @@ export declare namespace Y2 {
     type ProfileCreateResponse as ProfileCreateResponse,
     type ProfileUpdateResponse as ProfileUpdateResponse,
     type ProfileListResponse as ProfileListResponse,
-    type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfilePartialUpdateResponse as ProfilePartialUpdateResponse,
     type ProfileCreateParams as ProfileCreateParams,
     type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileDeleteParams as ProfileDeleteParams,
     type ProfilePartialUpdateParams as ProfilePartialUpdateParams,
   };
 
@@ -875,10 +877,10 @@ export declare namespace Y2 {
     type WebhookCreateResponse as WebhookCreateResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookDeleteResponse as WebhookDeleteResponse,
     type WebhookTestResponse as WebhookTestResponse,
     type WebhookCreateParams as WebhookCreateParams,
     type WebhookUpdateParams as WebhookUpdateParams,
+    type WebhookDeleteParams as WebhookDeleteParams,
   };
 
   export {
