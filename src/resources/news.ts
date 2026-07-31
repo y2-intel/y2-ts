@@ -118,6 +118,11 @@ export namespace NewsListResponse {
 
     content: string;
 
+    /**
+     * Normalized country, region, location, coordinates, and resolver provenance.
+     */
+    geography: Data.Geography | null;
+
     links: Data.Links;
 
     publishedAt: string;
@@ -136,6 +141,23 @@ export namespace NewsListResponse {
   }
 
   export namespace Data {
+    /**
+     * Normalized country, region, location, coordinates, and resolver provenance.
+     */
+    export interface Geography {
+      countryCode?: string;
+
+      lat?: number;
+
+      locationName?: string;
+
+      lon?: number;
+
+      provenance?: { [key: string]: unknown };
+
+      region?: string;
+    }
+
     export interface Links {
       canonical: string | null;
     }
@@ -195,6 +217,8 @@ export namespace NewsListResponse {
     pageCount: number;
 
     topics: Array<NewsAPI.TopicEnum>;
+
+    countryCode?: string | null;
   }
 
   export namespace Meta {
@@ -282,6 +306,12 @@ export namespace NewsListFeedsResponse {
 }
 
 export interface NewsListParams {
+  /**
+   * Filter by canonical ISO 3166-1 alpha-2 country code. When supplied without
+   * `topics`, the query searches every News Terminal topic.
+   */
+  countryCode?: string;
+
   /**
    * Opaque continuation token from the previous response. Bound to the original
    * filters and ordering.

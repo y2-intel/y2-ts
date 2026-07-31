@@ -26,6 +26,7 @@ describe('resource news', () => {
     await expect(
       client.news.list(
         {
+          countryCode: 'ES',
           cursor: 'cursor',
           format: 'json',
           limit: 1,

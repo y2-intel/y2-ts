@@ -189,6 +189,11 @@ export namespace CountryGetCountryNewsResponse {
       | 'other';
 
     /**
+     * Canonical ISO 3166-1 alpha-2 country code used by the indexed query.
+     */
+    countryCode: string;
+
+    /**
      * Event time as Unix timestamp (milliseconds)
      */
     eventTime: number;
@@ -199,24 +204,79 @@ export namespace CountryGetCountryNewsResponse {
     severity: 'low' | 'medium' | 'high' | 'critical';
 
     /**
+     * Data source type
+     */
+    sourceType: string;
+
+    /**
      * News headline
      */
     title: string;
+
+    coordinates?: Data.Coordinates | null;
 
     /**
      * News description/summary
      */
     description?: string;
 
+    eventTimeISO?: string;
+
+    fetchedAt?: number | null;
+
+    fetchedAtISO?: string | null;
+
     /**
-     * Data source type
+     * WGS 84 point with longitude first, then latitude.
      */
-    sourceType?: string;
+    geometry?: Data.Geometry | null;
+
+    /**
+     * Most specific resolved sovereign location, when known.
+     */
+    locationName?: string | null;
+
+    observedAt?: string | null;
+
+    occurredAt?: string;
+
+    provenance?: Data.Provenance;
+
+    /**
+     * Normalized OSINT region, when known.
+     */
+    region?: string | null;
 
     /**
      * Source URL
      */
     url?: string;
+  }
+
+  export namespace Data {
+    export interface Coordinates {
+      lat?: number;
+
+      lon?: number;
+    }
+
+    /**
+     * WGS 84 point with longitude first, then latitude.
+     */
+    export interface Geometry {
+      coordinates: Array<unknown>;
+
+      type: 'Point';
+    }
+
+    export interface Provenance {
+      countryCodeBasis: 'resolved_geography' | 'indexed_observation';
+
+      /**
+       * Resolver method, confidence, version, and chokepoint context when available.
+       */
+      geoResolution: { [key: string]: unknown } | null;
+    }
   }
 
   export interface Meta {
