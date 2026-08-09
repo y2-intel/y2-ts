@@ -286,6 +286,18 @@ export namespace OsintGetGpsJammingZonesResponse {
   }
 
   export interface Meta {
+    emptyReason:
+      | 'no_matching_activity'
+      | 'source_degraded'
+      | 'source_stale'
+      | 'source_unavailable'
+      | 'source_unknown'
+      | null;
+
+    lastSuccessfulIngestAt: string | null;
+
+    sourceStatus: 'healthy' | 'degraded' | 'stale' | 'unavailable' | 'unknown';
+
     count?: number;
 
     filters?: Meta.Filters;
@@ -368,6 +380,18 @@ export namespace OsintGetMilitaryPostureResponse {
   }
 
   export interface Meta {
+    emptyReason:
+      | 'no_matching_activity'
+      | 'source_degraded'
+      | 'source_stale'
+      | 'source_unavailable'
+      | 'source_unknown'
+      | null;
+
+    lastSuccessfulIngestAt: string | null;
+
+    sourceStatus: 'healthy' | 'degraded' | 'stale' | 'unavailable' | 'unknown';
+
     count?: number;
 
     /**
@@ -464,6 +488,18 @@ export namespace OsintListAircraftResponse {
   }
 
   export interface Meta {
+    emptyReason:
+      | 'no_matching_activity'
+      | 'source_degraded'
+      | 'source_stale'
+      | 'source_unavailable'
+      | 'source_unknown'
+      | null;
+
+    lastSuccessfulIngestAt: string | null;
+
+    sourceStatus: 'healthy' | 'degraded' | 'stale' | 'unavailable' | 'unknown';
+
     count?: number;
 
     filters?: Meta.Filters;
@@ -636,14 +672,31 @@ export namespace OsintListEventsResponse {
     export namespace Provenance {
       export interface Entity {
         /**
+         * Entity type
+         */
+        kind:
+          | 'person'
+          | 'organization'
+          | 'country'
+          | 'region'
+          | 'vessel'
+          | 'aircraft'
+          | 'facility'
+          | 'asset'
+          | 'indicator'
+          | 'cve'
+          | 'malware_family'
+          | 'threat_actor'
+          | 'vendor'
+          | 'software'
+          | 'ai_model'
+          | 'api_service'
+          | 'protocol';
+
+        /**
          * Entity name
          */
         name: string;
-
-        /**
-         * Entity type
-         */
-        type: 'person' | 'organization' | 'country' | 'location';
       }
     }
   }
@@ -696,9 +749,9 @@ export namespace OsintListVesselsResponse {
     vesselType: string;
 
     /**
-     * Position confidence
+     * Categorical position confidence from the source model.
      */
-    confidence?: number;
+    confidence?: 'low' | 'medium' | 'high';
 
     /**
      * Fetch time as Unix timestamp (milliseconds)
@@ -750,6 +803,18 @@ export namespace OsintListVesselsResponse {
   }
 
   export interface Meta {
+    emptyReason:
+      | 'no_matching_activity'
+      | 'source_degraded'
+      | 'source_stale'
+      | 'source_unavailable'
+      | 'source_unknown'
+      | null;
+
+    lastSuccessfulIngestAt: string | null;
+
+    sourceStatus: 'healthy' | 'degraded' | 'stale' | 'unavailable' | 'unknown';
+
     count?: number;
 
     filters?: Meta.Filters;

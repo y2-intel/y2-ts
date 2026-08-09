@@ -465,7 +465,7 @@ export interface ReportListParams {
   format?: 'json' | 'ndjson';
 
   /**
-   * Maximum number of report rows to scan for this page.
+   * Maximum number of reports to return for this page.
    */
   limit?: number;
 
