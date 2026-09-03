@@ -10,8 +10,9 @@ import { path } from '../internal/utils/path';
  */
 export class Subscriptions extends APIResource {
   /**
-   * Changes the delivery method for a subscription. When setting to `webhook`, a
-   * valid `webhookConfigId` must be provided. The webhook must be active.
+   * Changes a subscription's delivery method. Setting `webhook` requires an active
+   * `webhookConfigId`. On plans with member seats, set `emailAudience` to
+   * `workspace` to email active workspace members.
    */
   updateDelivery(
     subscriptionID: string,
@@ -30,14 +31,33 @@ export interface SubscriptionUpdateDeliveryResponse {
 
 export namespace SubscriptionUpdateDeliveryResponse {
   export interface Data {
-    /**
-     * Subscription delivery method
-     */
-    deliveryMethod: 'email' | 'sms' | 'webhook' | 'both_email_sms';
+    id: string;
 
-    subscriptionId: string;
+    delivery: Data.Delivery;
 
-    success: boolean;
+    links: Data.Links;
+
+    type: 'subscription';
+  }
+
+  export namespace Data {
+    export interface Delivery {
+      /**
+       * Email recipients for email-capable subscription delivery
+       */
+      emailAudience: 'individual' | 'workspace';
+
+      /**
+       * Subscription delivery method
+       */
+      method: 'email' | 'sms' | 'webhook' | 'both_email_sms';
+
+      webhookId: string | null;
+    }
+
+    export interface Links {
+      delivery: string;
+    }
   }
 
   export interface Meta {
@@ -50,6 +70,11 @@ export interface SubscriptionUpdateDeliveryParams {
    * Subscription delivery method
    */
   deliveryMethod: 'email' | 'sms' | 'webhook' | 'both_email_sms';
+
+  /**
+   * Email recipients for email-capable subscription delivery
+   */
+  emailAudience?: 'individual' | 'workspace';
 
   /**
    * Required when deliveryMethod is "webhook"

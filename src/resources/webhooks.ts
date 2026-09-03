@@ -2,16 +2,17 @@
 
 import { APIResource } from '../core/resource';
 import { APIPromise } from '../core/api-promise';
+import { buildHeaders } from '../internal/headers';
 import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Webhook configuration management (Pro feature)
+ * Webhook configuration for paid workspaces
  */
 export class Webhooks extends APIResource {
   /**
-   * Creates a new webhook configuration. Requires an active Pro subscription. The
-   * webhook URL must be HTTPS and pass SSRF security validation.
+   * Creates a webhook configuration. Requires a paid workspace plan with webhook
+   * access. The URL must use HTTPS and pass SSRF validation.
    *
    * @example
    * ```ts
@@ -21,30 +22,51 @@ export class Webhooks extends APIResource {
    * });
    * ```
    */
-  create(body: WebhookCreateParams, options?: RequestOptions): APIPromise<WebhookCreateResponse> {
-    return this._client.post('/webhooks', { body, ...options });
+  create(params: WebhookCreateParams, options?: RequestOptions): APIPromise<WebhookCreateResponse> {
+    const { 'Idempotency-Key': idempotencyKey, ...body } = params;
+    return this._client.post('/webhooks', {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(idempotencyKey != null ? { 'Idempotency-Key': idempotencyKey } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
-   * Updates an existing webhook configuration. All fields are optional. Only
-   * provided fields will be updated.
+   * Replaces every mutable webhook configuration field. `name` and `url` are
+   * required; omitted optional fields are reset to their defaults.
    *
    * @example
    * ```ts
-   * const webhook = await client.webhooks.update('webhookId');
+   * const webhook = await client.webhooks.update(
+   *   'whk_210b9798eb53baa4e69d31c1',
+   *   {
+   *     name: 'My Webhook',
+   *     url: 'https://example.com/webhook',
+   *   },
+   * );
    * ```
    */
   update(
     webhookID: string,
-    body: WebhookUpdateParams,
+    params: WebhookUpdateParams,
     options?: RequestOptions,
   ): APIPromise<WebhookUpdateResponse> {
-    return this._client.put(path`/webhooks/${webhookID}`, { body, ...options });
+    const { 'If-Match': ifMatch, ...body } = params;
+    return this._client.put(path`/webhooks/${webhookID}`, {
+      body,
+      ...options,
+      headers: buildHeaders([
+        { ...(ifMatch != null ? { 'If-Match': ifMatch } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
-   * Returns all webhook configurations for the authenticated user. Secrets are
-   * masked in the response.
+   * Lists the authenticated user's webhook configurations. Masks secrets.
    *
    * @example
    * ```ts
@@ -56,25 +78,39 @@ export class Webhooks extends APIResource {
   }
 
   /**
-   * Deletes a webhook configuration. Fails with 409 if the webhook is currently in
-   * use by any subscriptions.
+   * Deletes a webhook configuration. Returns `409` if any subscription uses it.
    *
    * @example
    * ```ts
-   * const webhook = await client.webhooks.delete('webhookId');
+   * await client.webhooks.delete(
+   *   'whk_210b9798eb53baa4e69d31c1',
+   * );
    * ```
    */
-  delete(webhookID: string, options?: RequestOptions): APIPromise<WebhookDeleteResponse> {
-    return this._client.delete(path`/webhooks/${webhookID}`, options);
+  delete(
+    webhookID: string,
+    params: WebhookDeleteParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<void> {
+    const { 'If-Match': ifMatch } = params ?? {};
+    return this._client.delete(path`/webhooks/${webhookID}`, {
+      ...options,
+      headers: buildHeaders([
+        { Accept: '*/*', ...(ifMatch != null ? { 'If-Match': ifMatch } : undefined) },
+        options?.headers,
+      ]),
+    });
   }
 
   /**
-   * Sends a test payload to the webhook URL and returns the result. Returns 422 if
-   * the webhook endpoint responds with an error.
+   * Sends a test payload to the webhook URL. Returns `422` if the endpoint responds
+   * with an error.
    *
    * @example
    * ```ts
-   * const response = await client.webhooks.test('webhookId');
+   * const response = await client.webhooks.test(
+   *   'whk_210b9798eb53baa4e69d31c1',
+   * );
    * ```
    */
   test(webhookID: string, options?: RequestOptions): APIPromise<WebhookTestResponse> {
@@ -91,9 +127,58 @@ export interface WebhookCreateResponse {
 export namespace WebhookCreateResponse {
   export interface Data {
     /**
-     * The ID of the newly created webhook configuration
+     * Stable public webhook configuration ID
      */
-    webhookId: string;
+    id: string;
+
+    createdAt: string;
+
+    /**
+     * Configured header names; values are never returned.
+     */
+    customHeaders: Array<string>;
+
+    deliveryHealth: Data.DeliveryHealth;
+
+    links: Data.Links;
+
+    /**
+     * Webhook display name
+     */
+    name: string;
+
+    signing: Data.Signing;
+
+    status: 'active' | 'disabled';
+
+    type: 'webhook';
+
+    updatedAt: string;
+
+    /**
+     * Webhook endpoint URL
+     */
+    url: string;
+  }
+
+  export namespace Data {
+    export interface DeliveryHealth {
+      consecutiveFailures: number;
+
+      lastUsedAt: string | null;
+    }
+
+    export interface Links {
+      self: string;
+
+      test: string;
+    }
+
+    export interface Signing {
+      algorithm: 'hmac-sha256' | null;
+
+      configured: boolean;
+    }
   }
 
   export interface Meta {
@@ -109,9 +194,59 @@ export interface WebhookUpdateResponse {
 
 export namespace WebhookUpdateResponse {
   export interface Data {
-    success: boolean;
+    /**
+     * Stable public webhook configuration ID
+     */
+    id: string;
 
-    webhookId: string;
+    createdAt: string;
+
+    /**
+     * Configured header names; values are never returned.
+     */
+    customHeaders: Array<string>;
+
+    deliveryHealth: Data.DeliveryHealth;
+
+    links: Data.Links;
+
+    /**
+     * Webhook display name
+     */
+    name: string;
+
+    signing: Data.Signing;
+
+    status: 'active' | 'disabled';
+
+    type: 'webhook';
+
+    updatedAt: string;
+
+    /**
+     * Webhook endpoint URL
+     */
+    url: string;
+  }
+
+  export namespace Data {
+    export interface DeliveryHealth {
+      consecutiveFailures: number;
+
+      lastUsedAt: string | null;
+    }
+
+    export interface Links {
+      self: string;
+
+      test: string;
+    }
+
+    export interface Signing {
+      algorithm: 'hmac-sha256' | null;
+
+      configured: boolean;
+    }
   }
 
   export interface Meta {
@@ -122,77 +257,103 @@ export namespace WebhookUpdateResponse {
 export interface WebhookListResponse {
   data: Array<WebhookListResponse.Data>;
 
+  links: WebhookListResponse.Links;
+
   meta: WebhookListResponse.Meta;
 }
 
 export namespace WebhookListResponse {
   export interface Data {
     /**
-     * Webhook configuration ID
+     * Stable public webhook configuration ID
      */
     id: string;
 
-    /**
-     * Creation timestamp (ms)
-     */
-    createdAt: number;
+    createdAt: string;
 
     /**
-     * Consecutive failure count (auto-disabled at 5)
+     * Configured header names; values are never returned.
      */
-    failureCount: number;
+    customHeaders: Array<string>;
 
-    /**
-     * Whether a secret is configured (actual secret is never exposed)
-     */
-    hasSecret: boolean;
+    deliveryHealth: Data.DeliveryHealth;
 
-    /**
-     * Whether the webhook is active
-     */
-    isActive: boolean;
+    links: Data.Links;
 
     /**
      * Webhook display name
      */
     name: string;
 
+    signing: Data.Signing;
+
+    status: 'active' | 'disabled';
+
+    type: 'webhook';
+
+    updatedAt: string;
+
     /**
      * Webhook endpoint URL
      */
     url: string;
+  }
 
-    /**
-     * Last delivery timestamp (ms)
-     */
-    lastUsedAt?: number;
+  export namespace Data {
+    export interface DeliveryHealth {
+      consecutiveFailures: number;
 
-    /**
-     * Last update timestamp (ms)
-     */
-    updatedAt?: number;
+      lastUsedAt: string | null;
+    }
+
+    export interface Links {
+      self: string;
+
+      test: string;
+    }
+
+    export interface Signing {
+      algorithm: 'hmac-sha256' | null;
+
+      configured: boolean;
+    }
+  }
+
+  export interface Links {
+    next: string | null;
+
+    self: string;
   }
 
   export interface Meta {
-    count?: number;
+    asOf: string;
+
+    /**
+     * @deprecated
+     */
+    count: number;
+
+    hasMore: boolean;
+
+    isDone: boolean;
+
+    limit: number;
+
+    nextCursor: string | null;
+
+    page: Meta.Page;
+
+    pageCount: number;
   }
-}
 
-export interface WebhookDeleteResponse {
-  data: WebhookDeleteResponse.Data;
+  export namespace Meta {
+    export interface Page {
+      hasMore: boolean;
 
-  meta: WebhookDeleteResponse.Meta;
-}
+      limit: number;
 
-export namespace WebhookDeleteResponse {
-  export interface Data {
-    deleted: boolean;
-
-    webhookId: string;
-  }
-
-  export interface Meta {
-    message?: string;
+      nextCursor: string | null;
+    }
   }
 }
 
@@ -229,36 +390,71 @@ export namespace WebhookTestResponse {
 
 export interface WebhookCreateParams {
   /**
-   * Webhook display name
+   * Body param: Webhook display name
    */
   name: string;
 
   /**
-   * Webhook endpoint URL (must be HTTPS)
+   * Body param: Webhook endpoint URL (must be HTTPS)
    */
   url: string;
 
   /**
-   * Custom headers to include in webhook deliveries
+   * Body param: Custom headers to include in webhook deliveries
    */
   headers?: { [key: string]: string };
 
   /**
-   * Shared secret for signature verification
+   * Body param: Shared secret for signature verification
    */
   secret?: string;
+
+  /**
+   * Header param: Client-generated retry key retained for 24 hours. Repeating the
+   * same key and canonical JSON body returns the original resource; changing the
+   * body returns `409 IDEMPOTENCY_CONFLICT`.
+   */
+  'Idempotency-Key'?: string;
 }
 
 export interface WebhookUpdateParams {
+  /**
+   * Body param: Webhook display name
+   */
+  name: string;
+
+  /**
+   * Body param: Webhook endpoint URL (must be HTTPS)
+   */
+  url: string;
+
+  /**
+   * Body param: Custom headers to include in webhook deliveries
+   */
   headers?: { [key: string]: string };
 
+  /**
+   * Body param
+   */
   isActive?: boolean;
 
-  name?: string;
-
+  /**
+   * Body param: Shared secret for signature verification
+   */
   secret?: string;
 
-  url?: string;
+  /**
+   * Header param: Strong ETag from the latest representation. A mismatch
+   * returns 412.
+   */
+  'If-Match'?: string;
+}
+
+export interface WebhookDeleteParams {
+  /**
+   * Strong ETag from the latest representation. A mismatch returns 412.
+   */
+  'If-Match'?: string;
 }
 
 export declare namespace Webhooks {
@@ -266,9 +462,9 @@ export declare namespace Webhooks {
     type WebhookCreateResponse as WebhookCreateResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookDeleteResponse as WebhookDeleteResponse,
     type WebhookTestResponse as WebhookTestResponse,
     type WebhookCreateParams as WebhookCreateParams,
     type WebhookUpdateParams as WebhookUpdateParams,
+    type WebhookDeleteParams as WebhookDeleteParams,
   };
 }

@@ -6,16 +6,15 @@ import { APIPromise } from '../core/api-promise';
 import { RequestOptions } from '../internal/request-options';
 
 /**
- * GloriaAI news terminal operations
+ * News Terminal items, feeds, and AI recaps
  */
 export class News extends APIResource {
   /**
-   * Returns news items from the GloriaAI terminal cache. Supports filtering by
-   * topics and pagination.
+   * Lists cached Y2 News Terminal items with topic filters and pagination.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   list(
@@ -26,12 +25,11 @@ export class News extends APIResource {
   }
 
   /**
-   * Returns AI-generated recap summaries for specified topics within a given
-   * timeframe.
+   * Lists AI-generated recaps for selected topics and timeframe.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getRecaps(
@@ -42,11 +40,11 @@ export class News extends APIResource {
   }
 
   /**
-   * Returns all available news feed topics with descriptions.
+   * Lists news feed topics and descriptions.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   listFeeds(options?: RequestOptions): APIPromise<NewsListFeedsResponse> {
@@ -60,7 +58,7 @@ export class News extends APIResource {
 export type TimeframeEnum = '12h' | '24h' | '3d' | '7d';
 
 /**
- * Available news feed topics from GloriaAI
+ * Available Y2 News Terminal feed topics
  */
 export type TopicEnum =
   | 'ai'
@@ -81,10 +79,33 @@ export type TopicEnum =
   | 'solana'
   | 'tech'
   | 'token_listings'
-  | 'virtuals';
+  | 'virtuals'
+  | 'geopolitics'
+  | 'politics_us'
+  | 'defense'
+  | 'sanctions_trade'
+  | 'equities'
+  | 'rates_fx'
+  | 'commodities'
+  | 'banking_reg'
+  | 'energy'
+  | 'cyber'
+  | 'semiconductors'
+  | 'biotech'
+  | 'logistics'
+  | 'critical_minerals'
+  | 'telecom'
+  | 'region_mena'
+  | 'region_europe'
+  | 'region_asiapac'
+  | 'region_latam'
+  | 'region_africa'
+  | 'region_namerica';
 
 export interface NewsListResponse {
   data: Array<NewsListResponse.Data>;
+
+  links: NewsListResponse.Links;
 
   meta: NewsListResponse.Meta;
 }
@@ -93,57 +114,121 @@ export namespace NewsListResponse {
   export interface Data {
     id: string;
 
-    /**
-     * Primary signal/headline
-     */
-    signal: string;
+    author: string | null;
+
+    content: string;
 
     /**
-     * Unix timestamp (seconds)
+     * Normalized country, region, location, coordinates, and resolver provenance.
      */
-    timestamp: number;
+    geography: Data.Geography | null;
 
-    timestampISO: string;
+    links: Data.Links;
 
-    author?: string;
+    publishedAt: string;
 
-    categories?: Array<string>;
+    sentiment: Data.Sentiment;
 
+    sources: Array<Data.Source>;
+
+    summary: string;
+
+    title: string;
+
+    topics: Array<string>;
+
+    type: 'news';
+  }
+
+  export namespace Data {
     /**
-     * Full context
+     * Normalized country, region, location, coordinates, and resolver provenance.
      */
-    content?: string;
+    export interface Geography {
+      countryCode?: string;
 
-    narrativeId?: string;
+      lat?: number;
 
-    /**
-     * Sentiment classification for news items
-     */
-    sentiment?: 'bullish' | 'bearish' | 'neutral' | null;
+      locationName?: string;
 
-    sentimentValue?: number;
+      lon?: number;
 
-    sources?: Array<string>;
+      provenance?: { [key: string]: unknown };
 
-    /**
-     * Short context summary
-     */
-    summary?: string;
+      region?: string;
+    }
 
-    /**
-     * Related tokens/assets
-     */
-    tokens?: Array<string>;
+    export interface Links {
+      canonical: string | null;
+    }
 
-    tweetUrl?: string;
+    export interface Sentiment {
+      /**
+       * Sentiment classification for news items
+       */
+      label: 'bullish' | 'bearish' | 'neutral' | null;
+
+      value: number;
+    }
+
+    export interface Source {
+      id: string;
+
+      language: string | null;
+
+      publishedAt: string;
+
+      publisher: string | null;
+
+      retrievedAt: string | null;
+
+      sourceType: string;
+
+      title: string | null;
+
+      url: string | null;
+    }
+  }
+
+  export interface Links {
+    next: string | null;
+
+    self: string;
   }
 
   export interface Meta {
-    count?: number;
+    asOf: string;
 
-    limit?: number;
+    /**
+     * @deprecated
+     */
+    count: number;
 
-    topics?: Array<NewsAPI.TopicEnum>;
+    hasMore: boolean;
+
+    isDone: boolean;
+
+    limit: number;
+
+    nextCursor: string | null;
+
+    page: Meta.Page;
+
+    pageCount: number;
+
+    topics: Array<NewsAPI.TopicEnum>;
+
+    countryCode?: string | null;
+  }
+
+  export namespace Meta {
+    export interface Page {
+      hasMore: boolean;
+
+      limit: number;
+
+      nextCursor: string | null;
+    }
   }
 }
 
@@ -173,9 +258,34 @@ export interface NewsListFeedsResponse {
 export namespace NewsListFeedsResponse {
   export interface Data {
     /**
-     * Available news feed topics from GloriaAI
+     * Available Y2 News Terminal feed topics
      */
     id: NewsAPI.TopicEnum;
+
+    /**
+     * UI gradient classes associated with the feed
+     */
+    color: string;
+
+    /**
+     * Feed description
+     */
+    description: string;
+
+    /**
+     * Machine-readable topic group ID
+     */
+    group: string;
+
+    /**
+     * Human-readable topic group name
+     */
+    groupLabel: string;
+
+    /**
+     * Whether eligible signals can enter the OSINT ontology pipeline
+     */
+    ingestOntology: boolean;
 
     /**
      * Human-readable name
@@ -183,27 +293,45 @@ export namespace NewsListFeedsResponse {
     name: string;
 
     /**
-     * Feed description
+     * Compact display name
      */
-    description?: string;
+    shortLabel: string;
   }
 
   export interface Meta {
     count?: number;
+
+    defaultTopics?: Array<NewsAPI.TopicEnum>;
   }
 }
 
 export interface NewsListParams {
+  /**
+   * Filter by canonical ISO 3166-1 alpha-2 country code. When supplied without
+   * `topics`, the query searches every News Terminal topic.
+   */
+  countryCode?: string;
+
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Use `ndjson` for row-oriented streaming output.
+   */
+  format?: 'json' | 'ndjson';
+
   /**
    * Maximum number of items to return
    */
   limit?: number;
 
   /**
-   * Comma-separated list of topics to filter by. Valid topics: ai, ai_agents, base,
-   * bitcoin, crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
-   * on_chain_whale, perps, ripple, rwa, solana, tech, token_listings, virtuals.
-   * Default: crypto, ai_agents, macro, bitcoin, ethereum, tech
+   * Comma-separated list of topics to filter by. Use `GET /news/feeds` to discover
+   * the current topic catalog. Default: crypto, geopolitics, macro, equities, ai,
+   * energy
    */
   topics?: string;
 }
@@ -215,9 +343,8 @@ export interface NewsGetRecapsParams {
   timeframe?: TimeframeEnum;
 
   /**
-   * Comma-separated list of topics. Valid topics: ai, ai_agents, base, bitcoin,
-   * crypto, dats, defi, ethereum, hyperliquid, machine_learning, macro,
-   * on_chain_whale, perps, ripple, rwa, solana, tech, token_listings, virtuals
+   * Comma-separated list of topics. Use `GET /news/feeds` to discover the current
+   * topic catalog.
    */
   topics?: string;
 }

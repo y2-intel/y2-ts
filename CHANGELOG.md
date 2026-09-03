@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.9.0 (2026-09-03)
+
+Full Changelog: [v0.8.0...v0.9.0](https://github.com/y2-intel/y2-ts/compare/v0.8.0...v0.9.0)
+
+### Features
+
+* **api:** api update ([47d2dcf](https://github.com/y2-intel/y2-ts/commit/47d2dcf1f8f3ff053853f1c61f97fa2cb405ba43))
+* **api:** api update ([1a2763d](https://github.com/y2-intel/y2-ts/commit/1a2763dd037e5dddcb174f8b032793ed4bd1edbc))
+* **api:** api update ([2658ccd](https://github.com/y2-intel/y2-ts/commit/2658ccde5fb34dd6eaeb25e18bd5810cd15efc5e))
+* **api:** api update ([c0090a4](https://github.com/y2-intel/y2-ts/commit/c0090a49c119299b83d5e6162bbceefc82d1ec3a))
+* **api:** api update ([bb6ce90](https://github.com/y2-intel/y2-ts/commit/bb6ce905f3fc6cf82c3315111296b6baf52d7e4f))
+* **api:** api update ([d515e04](https://github.com/y2-intel/y2-ts/commit/d515e04212b72c7fc1030f83851b1a766e5b8c99))
+* **api:** api update ([e814eee](https://github.com/y2-intel/y2-ts/commit/e814eeeee9af3e50bb9de6fbe66e010013316db9))
+* **api:** api update ([2398659](https://github.com/y2-intel/y2-ts/commit/239865959ac38fb2c40bf7b29546aa9ae9bac613))
+* **api:** api update ([31075b9](https://github.com/y2-intel/y2-ts/commit/31075b90459030fbb399740745113454ceb1a909))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([3151dbb](https://github.com/y2-intel/y2-ts/commit/3151dbba77123a06af679af7d7ccb2e9fe0c8bec))
+
+
+### Bug Fixes
+
+* **ci:** bump @arethetypeswrong/cli to ^0.18.0 and run CI workflows on Node 24 ([a86f74e](https://github.com/y2-intel/y2-ts/commit/a86f74eaf628682a974e81c9afbe824358b82090))
+* **client:** send content-type header for requests with an omitted optional body ([aa48387](https://github.com/y2-intel/y2-ts/commit/aa483870d5bfb3eee4ac47fbcc5781914c81c62d))
+* **typescript:** upgrade tsc-multi so that it works with Node 26 ([892c8e0](https://github.com/y2-intel/y2-ts/commit/892c8e062a8f441385540f8866d1a722634cfd83))
+
+
+### Chores
+
+* **tests:** remove redundant File import ([98dcc4c](https://github.com/y2-intel/y2-ts/commit/98dcc4ced4e48b4213b7c2fab9560571fd29de9f))
+
 ## 0.8.0 (2026-05-15)
 
 Full Changelog: [v0.7.1...v0.8.0](https://github.com/y2-intel/y2-ts/compare/v0.7.1...v0.8.0)

@@ -27,6 +27,8 @@ describe('resource osint', () => {
       client.osint.getConflictIndicators(
         {
           category: 'seismic',
+          cursor: 'cursor',
+          format: 'json',
           limit: 1,
           region: 'mena',
         },
@@ -51,7 +53,15 @@ describe('resource osint', () => {
   test.skip('getGpsJammingZones: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.getGpsJammingZones({ limit: 1, severity: 'low' }, { path: '/_stainless_unknown_path' }),
+      client.osint.getGpsJammingZones(
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+          severity: 'low',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 
@@ -71,7 +81,14 @@ describe('resource osint', () => {
   test.skip('getMilitaryPosture: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.getMilitaryPosture({ limit: 1 }, { path: '/_stainless_unknown_path' }),
+      client.osint.getMilitaryPosture(
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 
@@ -91,7 +108,15 @@ describe('resource osint', () => {
   test.skip('listAircraft: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.listAircraft({ limit: 1, theater: 'theater' }, { path: '/_stainless_unknown_path' }),
+      client.osint.listAircraft(
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+          theater: 'theater',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 
@@ -114,6 +139,8 @@ describe('resource osint', () => {
       client.osint.listEvents(
         {
           category: 'seismic',
+          cursor: 'cursor',
+          format: 'json',
           limit: 1,
           severity: 'low',
         },
@@ -138,7 +165,15 @@ describe('resource osint', () => {
   test.skip('listVessels: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.listVessels({ limit: 1, region: 'region' }, { path: '/_stainless_unknown_path' }),
+      client.osint.listVessels(
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+          region: 'region',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 
@@ -158,7 +193,15 @@ describe('resource osint', () => {
   test.skip('mapEvents: request options and params are passed correctly', async () => {
     // ensure the request options are being passed correctly by passing an invalid HTTP method in order to cause an error
     await expect(
-      client.osint.mapEvents({ limit: 1, region: 'mena' }, { path: '/_stainless_unknown_path' }),
+      client.osint.mapEvents(
+        {
+          cursor: 'cursor',
+          format: 'json',
+          limit: 1,
+          region: 'mena',
+        },
+        { path: '/_stainless_unknown_path' },
+      ),
     ).rejects.toThrow(Y2.NotFoundError);
   });
 });

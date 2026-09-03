@@ -9,7 +9,7 @@ Types:
 
 Methods:
 
-- <code title="get /reports/{reportId}">client.reports.<a href="./src/resources/reports.ts">retrieve</a>(reportID) -> ReportRetrieveResponse</code>
+- <code title="get /reports/{reportId}">client.reports.<a href="./src/resources/reports.ts">retrieve</a>(reportID, { ...params }) -> ReportRetrieveResponse</code>
 - <code title="get /reports">client.reports.<a href="./src/resources/reports.ts">list</a>({ ...params }) -> ReportListResponse</code>
 - <code title="get /reports/{reportId}/audio">client.reports.<a href="./src/resources/reports.ts">retrieveAudio</a>(reportID, { ...params }) -> ReportRetrieveAudioResponse</code>
 
@@ -20,7 +20,6 @@ Types:
 - <code><a href="./src/resources/profiles.ts">ProfileCreateResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileUpdateResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfileListResponse</a></code>
-- <code><a href="./src/resources/profiles.ts">ProfileDeleteResponse</a></code>
 - <code><a href="./src/resources/profiles.ts">ProfilePartialUpdateResponse</a></code>
 
 Methods:
@@ -28,7 +27,7 @@ Methods:
 - <code title="post /profiles">client.profiles.<a href="./src/resources/profiles.ts">create</a>({ ...params }) -> ProfileCreateResponse</code>
 - <code title="put /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">update</a>(profileID, { ...params }) -> ProfileUpdateResponse</code>
 - <code title="get /profiles">client.profiles.<a href="./src/resources/profiles.ts">list</a>() -> ProfileListResponse</code>
-- <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID) -> ProfileDeleteResponse</code>
+- <code title="delete /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">delete</a>(profileID, { ...params }) -> void</code>
 - <code title="patch /profiles/{profileId}">client.profiles.<a href="./src/resources/profiles.ts">partialUpdate</a>(profileID, { ...params }) -> ProfilePartialUpdateResponse</code>
 
 # News
@@ -54,7 +53,6 @@ Types:
 - <code><a href="./src/resources/webhooks.ts">WebhookCreateResponse</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookUpdateResponse</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookListResponse</a></code>
-- <code><a href="./src/resources/webhooks.ts">WebhookDeleteResponse</a></code>
 - <code><a href="./src/resources/webhooks.ts">WebhookTestResponse</a></code>
 
 Methods:
@@ -62,7 +60,7 @@ Methods:
 - <code title="post /webhooks">client.webhooks.<a href="./src/resources/webhooks.ts">create</a>({ ...params }) -> WebhookCreateResponse</code>
 - <code title="put /webhooks/{webhookId}">client.webhooks.<a href="./src/resources/webhooks.ts">update</a>(webhookID, { ...params }) -> WebhookUpdateResponse</code>
 - <code title="get /webhooks">client.webhooks.<a href="./src/resources/webhooks.ts">list</a>() -> WebhookListResponse</code>
-- <code title="delete /webhooks/{webhookId}">client.webhooks.<a href="./src/resources/webhooks.ts">delete</a>(webhookID) -> WebhookDeleteResponse</code>
+- <code title="delete /webhooks/{webhookId}">client.webhooks.<a href="./src/resources/webhooks.ts">delete</a>(webhookID, { ...params }) -> void</code>
 - <code title="post /webhooks/{webhookId}/test">client.webhooks.<a href="./src/resources/webhooks.ts">test</a>(webhookID) -> WebhookTestResponse</code>
 
 # Subscriptions

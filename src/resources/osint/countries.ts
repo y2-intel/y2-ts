@@ -6,16 +6,16 @@ import { RequestOptions } from '../../internal/request-options';
 import { path } from '../../internal/utils/path';
 
 /**
- * Situation Room OSINT intelligence operations
+ * Situation Room events, feeds, country data, and source health
  */
 export class Countries extends APIResource {
   /**
-   * Returns the per-country Conflict Indicators Index (CII) score, including
-   * baseline, delta, and component breakdown.
+   * Returns a country's Conflict Indicators Index (CII) score, baseline, delta, and
+   * components.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getCountryInstabilityIndex(
@@ -26,12 +26,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns recent news items specific to a given country, sourced from the OSINT
-   * event pipeline.
+   * Returns recent country news from the OSINT event pipeline.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getCountryNews(
@@ -43,12 +42,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns an AI-generated intelligence brief for a specific country. Briefs are
-   * generated periodically and cached.
+   * Returns a periodically generated, cached intelligence brief for a country.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getIntelligenceBrief(
@@ -59,12 +57,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns prediction market data for a specific country, including probabilities
-   * and trading volumes.
+   * Returns prediction-market probabilities and trading volumes for a country.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getPredictionMarkets(
@@ -76,12 +73,11 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns the primary stock market index data for a specific country, including
-   * weekly change and currency.
+   * Returns a country's primary stock index, weekly change, and currency.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   getStockMarketIndex(
@@ -193,6 +189,11 @@ export namespace CountryGetCountryNewsResponse {
       | 'other';
 
     /**
+     * Canonical ISO 3166-1 alpha-2 country code used by the indexed query.
+     */
+    countryCode: string;
+
+    /**
      * Event time as Unix timestamp (milliseconds)
      */
     eventTime: number;
@@ -203,24 +204,79 @@ export namespace CountryGetCountryNewsResponse {
     severity: 'low' | 'medium' | 'high' | 'critical';
 
     /**
+     * Data source type
+     */
+    sourceType: string;
+
+    /**
      * News headline
      */
     title: string;
+
+    coordinates?: Data.Coordinates | null;
 
     /**
      * News description/summary
      */
     description?: string;
 
+    eventTimeISO?: string;
+
+    fetchedAt?: number | null;
+
+    fetchedAtISO?: string | null;
+
     /**
-     * Data source type
+     * WGS 84 point with longitude first, then latitude.
      */
-    sourceType?: string;
+    geometry?: Data.Geometry | null;
+
+    /**
+     * Most specific resolved sovereign location, when known.
+     */
+    locationName?: string | null;
+
+    observedAt?: string | null;
+
+    occurredAt?: string;
+
+    provenance?: Data.Provenance;
+
+    /**
+     * Normalized OSINT region, when known.
+     */
+    region?: string | null;
 
     /**
      * Source URL
      */
     url?: string;
+  }
+
+  export namespace Data {
+    export interface Coordinates {
+      lat?: number;
+
+      lon?: number;
+    }
+
+    /**
+     * WGS 84 point with longitude first, then latitude.
+     */
+    export interface Geometry {
+      coordinates: Array<unknown>;
+
+      type: 'Point';
+    }
+
+    export interface Provenance {
+      countryCodeBasis: 'resolved_geography' | 'indexed_observation';
+
+      /**
+       * Resolver method, confidence, version, and chokepoint context when available.
+       */
+      geoResolution: { [key: string]: unknown } | null;
+    }
   }
 
   export interface Meta {
@@ -253,10 +309,9 @@ export namespace CountryGetIntelligenceBriefResponse {
      */
     generatedAt: number;
 
-    /**
-     * LLM model used for generation
-     */
-    model: string;
+    generatedAtISO: string;
+
+    publishedAt: string;
   }
 }
 
@@ -279,20 +334,31 @@ export namespace CountryGetPredictionMarketsResponse {
    * `PredictionMarket`.
    */
   export interface Data {
+    id: string;
+
     /**
      * Prediction market identifier
      */
     marketId: string;
 
     /**
+     * Typed outcome labels with normalized fractional probabilities.
+     */
+    outcomes: Array<Data.Outcome>;
+
+    /**
      * Current probability (0-1)
      */
     probability: number;
+
+    probabilityBasis: 'fraction_0_to_1';
 
     /**
      * Market question/title
      */
     title: string;
+
+    type: 'prediction_market';
 
     /**
      * Market resolution date
@@ -304,15 +370,7 @@ export namespace CountryGetPredictionMarketsResponse {
      */
     liquidity?: number | null;
 
-    /**
-     * Outcome prices corresponding to each outcome (null if unavailable)
-     */
-    outcomePrices?: Array<string> | null;
-
-    /**
-     * Possible market outcomes
-     */
-    outcomes?: Array<string>;
+    liquidityMeasurement?: Data.LiquidityMeasurement;
 
     /**
      * Polymarket URL for this market
@@ -328,6 +386,38 @@ export namespace CountryGetPredictionMarketsResponse {
      * Trading volume
      */
     volume?: number;
+
+    volumeMeasurement?: Data.VolumeMeasurement;
+  }
+
+  export namespace Data {
+    export interface Outcome {
+      label: string;
+
+      probability: number;
+    }
+
+    export interface LiquidityMeasurement {
+      basis: 'provider_reported';
+
+      /**
+       * ISO 4217 code when the source identifies one; otherwise null.
+       */
+      currency: string | null;
+
+      value: number | null;
+    }
+
+    export interface VolumeMeasurement {
+      basis: 'provider_reported';
+
+      /**
+       * ISO 4217 code when the source identifies one; otherwise null.
+       */
+      currency: string | null;
+
+      value: number | null;
+    }
   }
 
   export interface Meta {
@@ -389,12 +479,35 @@ export namespace CountryGetStockMarketIndexResponse {
 
 export interface CountryGetCountryNewsParams {
   /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * Select the JSON resource envelope, row-oriented NDJSON, or an RFC 7946
+   * FeatureCollection.
+   */
+  format?: 'json' | 'ndjson' | 'geojson';
+
+  /**
    * Maximum number of news items to return
    */
   limit?: number;
 }
 
 export interface CountryGetPredictionMarketsParams {
+  /**
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * `json` uses the resource envelope; `ndjson` streams one canonical row per line.
+   */
+  format?: 'json' | 'ndjson';
+
   /**
    * Maximum number of predictions to return
    */

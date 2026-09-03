@@ -30,7 +30,7 @@ import {
 import {
   ProfileCreateParams,
   ProfileCreateResponse,
-  ProfileDeleteResponse,
+  ProfileDeleteParams,
   ProfileListResponse,
   ProfilePartialUpdateParams,
   ProfilePartialUpdateResponse,
@@ -44,6 +44,7 @@ import {
   ReportListResponse,
   ReportRetrieveAudioParams,
   ReportRetrieveAudioResponse,
+  ReportRetrieveParams,
   ReportRetrieveResponse,
   Reports,
 } from './resources/reports';
@@ -55,7 +56,7 @@ import {
 import {
   WebhookCreateParams,
   WebhookCreateResponse,
-  WebhookDeleteResponse,
+  WebhookDeleteParams,
   WebhookListResponse,
   WebhookTestResponse,
   WebhookUpdateParams,
@@ -729,11 +730,19 @@ export class Y2 {
     return () => controller.abort();
   }
 
-  private buildBody({ options: { body, headers: rawHeaders } }: { options: FinalRequestOptions }): {
+  private buildBody({ options }: { options: FinalRequestOptions }): {
     bodyHeaders: HeadersLike;
     body: BodyInit | undefined;
   } {
+    const { body, headers: rawHeaders } = options;
     if (!body) {
+      // A resource method always passes a `body` key when its operation defines a
+      // request body, even if the caller omitted an optional body param. Keep the
+      // content-type for those, and only elide it for operations with no body at
+      // all (e.g. GET/DELETE).
+      if (body == null && 'body' in options) {
+        return this.#encoder({ body, headers: buildHeaders([rawHeaders]) });
+      }
       return { bodyHeaders: undefined, body: undefined };
     }
     const headers = buildHeaders([rawHeaders]);
@@ -794,19 +803,19 @@ export class Y2 {
   static toFile = Uploads.toFile;
 
   /**
-   * Intelligence report operations
+   * Report retrieval, text, audio, signals, and ontology graphs
    */
   reports: API.Reports = new API.Reports(this);
   /**
-   * Subscription profile operations
+   * Profile subscriptions, ownership, and configuration
    */
   profiles: API.Profiles = new API.Profiles(this);
   /**
-   * GloriaAI news terminal operations
+   * News Terminal items, feeds, and AI recaps
    */
   news: API.News = new API.News(this);
   /**
-   * Webhook configuration management (Pro feature)
+   * Webhook configuration for paid workspaces
    */
   webhooks: API.Webhooks = new API.Webhooks(this);
   /**
@@ -814,7 +823,7 @@ export class Y2 {
    */
   subscriptions: API.Subscriptions = new API.Subscriptions(this);
   /**
-   * Situation Room OSINT intelligence operations
+   * Situation Room events, feeds, country data, and source health
    */
   osint: API.Osint = new API.Osint(this);
 }
@@ -835,6 +844,7 @@ export declare namespace Y2 {
     type ReportRetrieveResponse as ReportRetrieveResponse,
     type ReportListResponse as ReportListResponse,
     type ReportRetrieveAudioResponse as ReportRetrieveAudioResponse,
+    type ReportRetrieveParams as ReportRetrieveParams,
     type ReportListParams as ReportListParams,
     type ReportRetrieveAudioParams as ReportRetrieveAudioParams,
   };
@@ -844,10 +854,10 @@ export declare namespace Y2 {
     type ProfileCreateResponse as ProfileCreateResponse,
     type ProfileUpdateResponse as ProfileUpdateResponse,
     type ProfileListResponse as ProfileListResponse,
-    type ProfileDeleteResponse as ProfileDeleteResponse,
     type ProfilePartialUpdateResponse as ProfilePartialUpdateResponse,
     type ProfileCreateParams as ProfileCreateParams,
     type ProfileUpdateParams as ProfileUpdateParams,
+    type ProfileDeleteParams as ProfileDeleteParams,
     type ProfilePartialUpdateParams as ProfilePartialUpdateParams,
   };
 
@@ -867,10 +877,10 @@ export declare namespace Y2 {
     type WebhookCreateResponse as WebhookCreateResponse,
     type WebhookUpdateResponse as WebhookUpdateResponse,
     type WebhookListResponse as WebhookListResponse,
-    type WebhookDeleteResponse as WebhookDeleteResponse,
     type WebhookTestResponse as WebhookTestResponse,
     type WebhookCreateParams as WebhookCreateParams,
     type WebhookUpdateParams as WebhookUpdateParams,
+    type WebhookDeleteParams as WebhookDeleteParams,
   };
 
   export {

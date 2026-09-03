@@ -7,29 +7,33 @@ import { RequestOptions } from '../internal/request-options';
 import { path } from '../internal/utils/path';
 
 /**
- * Intelligence report operations
+ * Report retrieval, text, audio, signals, and ontology graphs
  */
 export class Reports extends APIResource {
   /**
-   * Returns the full content of a specific intelligence report, including HTML
-   * content, sources, and audio metadata.
+   * Returns a compact report by default. Use bounded `include` values or
+   * `view=agent`; request `text/markdown` for the canonical Markdown representation.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
-  retrieve(reportID: string, options?: RequestOptions): APIPromise<ReportRetrieveResponse> {
-    return this._client.get(path`/reports/${reportID}`, options);
+  retrieve(
+    reportID: string,
+    query: ReportRetrieveParams | null | undefined = {},
+    options?: RequestOptions,
+  ): APIPromise<ReportRetrieveResponse> {
+    return this._client.get(path`/reports/${reportID}`, { query, ...options });
   }
 
   /**
-   * Returns a list of reports for the user's subscribed profiles. Results are sorted
-   * by generation date (newest first).
+   * Lists reports for the user's subscribed profiles by generation date, newest
+   * first.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   list(
@@ -43,9 +47,9 @@ export class Reports extends APIResource {
    * Returns audio file metadata or redirects to the CDN URL. Requires the
    * `reports:audio` scope.
    *
-   * This endpoint also supports x402 pay-per-request access. Requests with a valid
-   * Bearer token use the normal API-key flow. Requests without Authorization return
-   * `402 Payment Required` with a `PAYMENT-REQUIRED` header and can be retried with
+   * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
+   * authentication. Without a Bearer API key, start the x402 flow from the
+   * `402 Payment Required` response and `PAYMENT-REQUIRED` header; retry with
    * `PAYMENT-SIGNATURE`.
    */
   retrieveAudio(
@@ -59,7 +63,7 @@ export class Reports extends APIResource {
 
 export interface AudioMetadata {
   /**
-   * Duration in seconds
+   * @deprecated Duration in seconds
    */
   duration?: number;
 
@@ -69,18 +73,18 @@ export interface AudioMetadata {
   durationFormatted?: string;
 
   /**
-   * File size in bytes
+   * Canonical duration in seconds.
    */
-  fileSize?: number;
+  durationSeconds?: number | null;
+
+  /**
+   * File size in bytes.
+   */
+  fileSizeBytes?: number | null;
 
   format?: 'mp3';
 
   mimeType?: 'audio/mpeg';
-
-  /**
-   * Convex storage ID for internal reference
-   */
-  storageId?: string;
 
   /**
    * CDN URL for audio file
@@ -96,106 +100,234 @@ export namespace ReportRetrieveResponse {
   export interface Data {
     id: string;
 
-    content: Data.Content;
+    audio: Data.Audio;
 
-    generatedAt: number;
+    generatedAt: string;
 
-    generatedAtISO: string;
+    intelligence: Data.Intelligence;
+
+    language: string;
+
+    links: { [key: string]: string | null };
 
     profileId: string;
 
-    audio?: ReportsAPI.AudioMetadata | null;
+    publishedAt: string;
 
-    metadata?: Data.Metadata;
+    status: 'published';
 
-    profileName?: string;
+    summary: string | null;
 
-    profileTopic?: string;
+    topic: string | null;
 
-    sources?: Array<string>;
+    type: 'report';
 
-    topic?: string;
+    audioRepresentation?: ReportsAPI.AudioMetadata | null;
+
+    content?: Data.Content;
+
+    graph?: Data.Graph;
+
+    profile?: Data.Profile;
+
+    signals?: Array<Data.Signal>;
+
+    sources?: Array<Data.Source>;
   }
 
   export namespace Data {
+    export interface Audio {
+      durationSeconds: number | null;
+
+      mediaType: string | null;
+
+      status: 'available' | 'unavailable';
+    }
+
+    export interface Intelligence {
+      graph: Intelligence.Graph | null;
+
+      signalCount: number;
+    }
+
+    export namespace Intelligence {
+      export interface Graph {
+        edgeCount: number;
+
+        incidentCount: number;
+
+        nodeCount: number;
+      }
+    }
+
     export interface Content {
-      /**
-       * Full HTML content
-       */
-      html?: string;
+      markdown: string;
 
-      /**
-       * SMS-friendly summary
-       */
-      summary?: string;
+      mediaType: 'text/markdown';
     }
 
-    export interface Metadata {
-      /**
-       * Source freshness validation results
-       */
-      freshnessMetadata?: Metadata.FreshnessMetadata;
+    export interface Graph {
+      edges: Array<Graph.Edge>;
 
-      model?: string;
+      generatedAt: string;
 
-      /**
-       * Metadata about recursive research execution
-       */
-      recursionMetadata?: Metadata.RecursionMetadata;
+      incidents: Array<Graph.Incident>;
 
-      totalCost?: number;
+      nodes: Array<Graph.Node>;
+
+      sources: Array<Graph.Source>;
+
+      summary: string;
     }
 
-    export namespace Metadata {
-      /**
-       * Source freshness validation results
-       */
-      export interface FreshnessMetadata {
-        accessibleLinks?: number;
+    export namespace Graph {
+      export interface Edge {
+        id: string;
 
-        /**
-         * Average source age in milliseconds
-         */
-        averageAgeMs?: number;
+        confidence: number;
 
-        /**
-         * Overall freshness score (higher = fresher)
-         */
-        freshnessScore?: number;
+        from: string;
 
-        staleSourcesCount?: number;
+        source: Edge.Source | null;
 
-        totalLinks?: number;
+        to: string;
 
-        validatedAt?: number;
+        type: string;
       }
 
-      /**
-       * Metadata about recursive research execution
-       */
-      export interface RecursionMetadata {
-        /**
-         * Recursion depth achieved (0 = standard report)
-         */
-        depth?: number;
+      export namespace Edge {
+        export interface Source {
+          id: string;
 
-        /**
-         * Reason if fallback to standard generation occurred
-         */
-        fallbackReason?: string;
-
-        layersProcessed?: number;
-
-        strategy?: 'breadth-first' | 'depth-first' | 'hybrid';
-
-        subtopicsGenerated?: Array<string>;
-
-        totalSourcesCollected?: number;
-
-        totalTimeMs?: number;
-
-        uniqueSourcesAggregated?: number;
+          url: string;
+        }
       }
+
+      export interface Incident {
+        id: string;
+
+        category: string;
+
+        entityIds: Array<string>;
+
+        occurredAt: string;
+
+        severity: string;
+
+        sources: Array<Incident.Source>;
+
+        title: string;
+
+        type: 'incident';
+      }
+
+      export namespace Incident {
+        export interface Source {
+          id: string;
+
+          url: string;
+        }
+      }
+
+      export interface Node {
+        id: string;
+
+        kind: string;
+
+        label: string;
+
+        sources: Array<Node.Source>;
+
+        summary: string | null;
+
+        type: 'entity';
+      }
+
+      export namespace Node {
+        export interface Source {
+          id: string;
+
+          url: string;
+        }
+      }
+
+      export interface Source {
+        id: string;
+
+        url: string;
+      }
+    }
+
+    export interface Profile {
+      id: string;
+
+      name: string | null;
+
+      topic: string | null;
+    }
+
+    export interface Signal {
+      actionType: string;
+
+      confidence: number;
+
+      decision: string;
+
+      domain: string;
+
+      inferenceType: string;
+
+      justification: string;
+
+      priority: string;
+
+      signal: string;
+
+      sources: Array<Signal.Source>;
+
+      subjects: Array<Signal.Subject>;
+
+      tags: Array<string>;
+
+      timeHorizon: string;
+
+      title: string;
+    }
+
+    export namespace Signal {
+      export interface Source {
+        id: string;
+
+        url: string;
+      }
+
+      export interface Subject {
+        entityId: string | null;
+
+        key: string;
+
+        kind: string;
+
+        label: string;
+      }
+    }
+
+    export interface Source {
+      id: string;
+
+      language: string | null;
+
+      publishedAt: string | null;
+
+      publisher: string | null;
+
+      retrievedAt: string;
+
+      sourceType: string;
+
+      title: string | null;
+
+      url: string;
     }
   }
 }
@@ -203,56 +335,99 @@ export namespace ReportRetrieveResponse {
 export interface ReportListResponse {
   data: Array<ReportListResponse.Data>;
 
+  links: ReportListResponse.Links;
+
   meta: ReportListResponse.Meta;
 }
 
 export namespace ReportListResponse {
   export interface Data {
-    /**
-     * Report ID (Convex document ID)
-     */
     id: string;
 
-    /**
-     * Unix timestamp (milliseconds)
-     */
-    generatedAt: number;
+    audio: Data.Audio;
 
-    /**
-     * ISO 8601 timestamp
-     */
-    generatedAtISO: string;
+    generatedAt: string;
 
-    /**
-     * Profile ID this report belongs to
-     */
+    intelligence: Data.Intelligence;
+
+    language: string;
+
+    links: { [key: string]: string | null };
+
     profileId: string;
 
-    /**
-     * Whether audio narration is available
-     */
-    hasAudio?: boolean;
+    publishedAt: string;
 
-    /**
-     * LLM model used for generation
-     */
-    model?: string;
+    status: 'published';
 
-    /**
-     * Brief SMS-friendly summary
-     */
-    summary?: string;
+    summary: string | null;
 
-    /**
-     * Report topic
-     */
-    topic?: string;
+    topic: string | null;
+
+    type: 'report';
+  }
+
+  export namespace Data {
+    export interface Audio {
+      durationSeconds: number | null;
+
+      mediaType: string | null;
+
+      status: 'available' | 'unavailable';
+    }
+
+    export interface Intelligence {
+      graph: Intelligence.Graph | null;
+
+      signalCount: number;
+    }
+
+    export namespace Intelligence {
+      export interface Graph {
+        edgeCount: number;
+
+        incidentCount: number;
+
+        nodeCount: number;
+      }
+    }
+  }
+
+  export interface Links {
+    next: string | null;
+
+    self: string;
   }
 
   export interface Meta {
-    count?: number;
+    asOf: string;
 
-    limit?: number;
+    /**
+     * @deprecated
+     */
+    count: number;
+
+    hasMore: boolean;
+
+    isDone: boolean;
+
+    limit: number;
+
+    nextCursor: string | null;
+
+    page: Meta.Page;
+
+    pageCount: number;
+  }
+
+  export namespace Meta {
+    export interface Page {
+      hasMore: boolean;
+
+      limit: number;
+
+      nextCursor: string | null;
+    }
   }
 }
 
@@ -260,21 +435,49 @@ export interface ReportRetrieveAudioResponse {
   data: AudioMetadata | null;
 }
 
+export interface ReportRetrieveParams {
+  /**
+   * Explicit representation override.
+   */
+  format?: 'markdown';
+
+  /**
+   * Comma-separated `content,sources,signals,graph,audio` expansions.
+   */
+  include?: string;
+
+  /**
+   * Compact projection optimized for grounded agent context.
+   */
+  view?: 'agent';
+}
+
 export interface ReportListParams {
   /**
-   * Maximum number of reports to return (hard-capped at 5)
+   * Opaque continuation token from the previous response. Bound to the original
+   * filters and ordering.
+   */
+  cursor?: string;
+
+  /**
+   * `json` uses the resource envelope; `ndjson` streams one canonical row per line.
+   */
+  format?: 'json' | 'ndjson';
+
+  /**
+   * Maximum number of reports to return for this page.
    */
   limit?: number;
 
   /**
-   * Filter reports by profile ID
+   * Filter by stable public profile ID (`prf_...`).
    */
   profileId?: string;
 }
 
 export interface ReportRetrieveAudioParams {
   /**
-   * If true, returns 302 redirect to audio CDN URL
+   * When true, redirects with `302` to the audio CDN URL
    */
   redirect?: boolean;
 }
@@ -285,6 +488,7 @@ export declare namespace Reports {
     type ReportRetrieveResponse as ReportRetrieveResponse,
     type ReportListResponse as ReportListResponse,
     type ReportRetrieveAudioResponse as ReportRetrieveAudioResponse,
+    type ReportRetrieveParams as ReportRetrieveParams,
     type ReportListParams as ReportListParams,
     type ReportRetrieveAudioParams as ReportRetrieveAudioParams,
   };
