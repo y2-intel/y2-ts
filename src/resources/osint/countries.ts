@@ -26,7 +26,12 @@ export class Countries extends APIResource {
   }
 
   /**
-   * Returns recent country news from the OSINT event pipeline.
+   * Returns recent country news from the OSINT event pipeline. Uses the
+   * observation's indexed ISO country attribution, not countries merely mentioned or
+   * exposed to a regional event. Includes unexpired RSS, GDELT, ACLED, News
+   * Terminal, and Y2 report observations, excluding seismic and weather categories.
+   * Filters apply before pagination; satellite detections do not consume the news
+   * result window. Results retain canonical observation IDs.
    *
    * Supports x402 pay-per-request. Requests with a valid Bearer token use API-key
    * authentication. Without a Bearer API key, start the x402 flow from the
